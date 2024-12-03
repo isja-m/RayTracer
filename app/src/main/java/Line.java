@@ -9,13 +9,13 @@ public class Line {
     }
 
     public ParametricLine getParametricLine() {
-        double dirXCoord = point2.xCoord - point1.xCoord;
-        double dirYCoord = point2.yCoord - point1.yCoord;
-        double dirZCoord = point2.zCoord - point1.zCoord;
-        double normalizationFactor = Math.sqrt(dirXCoord*dirXCoord + dirYCoord*dirYCoord + dirZCoord*dirZCoord);
-        dirXCoord /= normalizationFactor;
-        dirYCoord /= normalizationFactor;
-        dirZCoord /= normalizationFactor;
-        return new ParametricLine(point1, new Vector(dirXCoord, dirYCoord, dirZCoord));
+        Vector direction = point2.add(point1.scalarMultiple(-1));
+        double normalizationFactor = 1/direction.norm();
+        Vector normalizedDirection = direction.scalarMultiple(normalizationFactor);
+        return new ParametricLine(point1, normalizedDirection);
+    }
+
+    public Intersection findIntersection(Line line2) {
+        return this.getParametricLine().findIntersection(line2.getParametricLine());
     }
 }
