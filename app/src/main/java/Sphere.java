@@ -15,6 +15,10 @@ public class Sphere implements Shape {
         this.diffuseCoefficient = (float)diffuseCoefficient;
     }
 
+    public Sphere(double x, double y, double z, double radius, double diffuseCoefficient) {
+        this(new Vector(x,y,z), radius, diffuseCoefficient);
+    }
+
     public Vector[] intersect(Line line) {
         return this.intersect(line.getParametricLine());
     }

@@ -1,6 +1,8 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class SceneTest {
     static Vector corner1;
@@ -13,7 +15,7 @@ public class SceneTest {
     static Sphere sphere;
 
     @BeforeAll
-    static public void setupBeforeAll() {
+    public static void setupBeforeAll() {
         corner1 = new Vector(-2, -1, -1);
         corner2 = new Vector(-2, 1, -1);
         corner3 = new Vector(-2, -1, 1);
@@ -54,5 +56,16 @@ public class SceneTest {
     public void doNotDetectBrightnessIfNoShapeIsHit() {
         scene.updateBrightnessAtPixel(0,0);
         assertFalse(scene.getPixel(0, 0).getBrightness()[0] > 0);
+    }
+
+    @Test
+    public void doNotDetectBrightnessIfOtherShapeBlocksLightsource() {
+        Sphere sphere1 = new Sphere(0,0,0, 1, 0.5);
+        Viewport viewport2 = new Viewport(corner1, corner2, corner3, 500, 500);
+        Lightsource lightsource2 = new Lightsource(new Vector(0, 0, -20), 100,0,0);
+        Scene scene2 = new Scene(lightsource2, sphere1, viewpoint, viewport2);
+        scene2.addShape(new Sphere(0,0,-4,2,0.5));
+        scene2.updateBrightnessAtPixel(240,250);
+        assertEquals(0,scene2.getPixel(240, 250).getBrightness()[0]);
     }
 }
