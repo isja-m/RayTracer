@@ -18,11 +18,11 @@ public class SceneTest {
         corner2 = new Vector(-2, 1, -1);
         corner3 = new Vector(-2, -1, 1);
         viewport = new Viewport(corner1, corner2, corner3, 480, 640);
-        sphere = new Sphere(new Vector(0,0,0), 1);
+        sphere = new Sphere(new Vector(0,0,0), 1, 0.5);
         viewpoint = new Vector(-3, 0, 0);
         lightsource = new Lightsource(new Vector(-1, 0, -2), 50,0,0);
         scene = new Scene(lightsource, sphere, viewpoint, viewport);
-        scene.addShape(new Sphere(new Vector(4,0,0),1));
+        scene.addShape(new Sphere(new Vector(4,0,0),1, 0.5));
         scene.addLightsource(new Lightsource(new Vector(2, 0, 0), 100,0,0));
     }
 
@@ -48,5 +48,11 @@ public class SceneTest {
     public void onlyDetectBrightnessAtNearestObject() {
         scene.updateBrightness();
         assertTrue(scene.getPixel(230,320).getBrightness()[0] < 100);
+    }
+
+    @Test
+    public void doNotDetectBrightnessIfNoShapeIsHit() {
+        scene.updateBrightnessAtPixel(0,0);
+        assertFalse(scene.getPixel(0, 0).getBrightness()[0] > 0);
     }
 }

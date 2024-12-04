@@ -1,25 +1,19 @@
 public class Pixel {
     final int xCoord;
     final int yCoord;
-    private double redBrightness;
-    private double greenBrightness;
-    private double blueBrightness;
+    private Vector brightnesses;
 
     public Pixel(int xCoord, int yCoord) {
         this.xCoord = xCoord;
         this.yCoord = yCoord;
-        redBrightness = 0;
-        greenBrightness = 0;
-        blueBrightness = 0;
+        this.brightnesses = new Vector(0,0, 0);
     }
 
-    public void addToBrightness(Lightsource lightsource) {
-        this.redBrightness += lightsource.redBrightness;
-        this.greenBrightness += lightsource.greenBrightness;
-        this.blueBrightness += lightsource.blueBrightness;
+    public void addToBrightness(Vector brightnesses) {
+        this.brightnesses = this.brightnesses.add(brightnesses);
     }
 
     public double[] getBrightness() {
-        return new double[] {redBrightness, greenBrightness, blueBrightness};
+        return new double[] {brightnesses.xCoord, brightnesses.yCoord, brightnesses.zCoord};
     }
 }

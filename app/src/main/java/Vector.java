@@ -37,4 +37,16 @@ public class Vector {
     public double distance(Vector vector2) {
         return this.add(vector2.scalarMultiple(-1)).norm();
     }
+
+    public Vector perpendicularVector(Shape shape) {
+        if (shape instanceof Sphere) {
+            return perpendicularVector((Sphere) shape);
+        }
+        return null;
+    }
+
+    public Vector perpendicularVector(Sphere sphere) {
+        Line perpendicularLine = new Line(sphere.centre, this);
+        return perpendicularLine.getParametricLine().direction;
+    }
 }

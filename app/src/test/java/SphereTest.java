@@ -5,7 +5,7 @@ public class SphereTest {
     @Test
     public void intersectFindsTwoIntersectionsWithSphere() {
         Vector origin = new Vector(0, 0, 0);
-        Sphere sphere = new Sphere(origin, 1);
+        Sphere sphere = new Sphere(origin, 1, 0.5);
         Vector vector1 = new Vector(Math.sqrt(0.5), -1, 0);
         Vector vector2 = new Vector(Math.sqrt(0.5), 1, 0);
         Line line = new Line(vector1, vector2);
@@ -19,7 +19,7 @@ public class SphereTest {
     @Test
     public void nearestIntersectFindsNearestIntersection() {
         Vector origin = new Vector(0, 0, 0);
-        Sphere sphere = new Sphere(origin, 1);
+        Sphere sphere = new Sphere(origin, 1, 0.5);
         Vector vector1 = new Vector(Math.sqrt(0.5), -1, 0);
         Vector vector2 = new Vector(Math.sqrt(0.5), 1, 0);
         Line line = new Line(vector1, vector2);
@@ -31,7 +31,7 @@ public class SphereTest {
     @Test
     public void intersectFindsOneIntersectionForTangentLineWithSphere() {
         Vector origin = new Vector(0, 0, 0);
-        Sphere sphere = new Sphere(origin, 1);
+        Sphere sphere = new Sphere(origin, 1, 0.5);
         Vector vector1 = new Vector(1, -1, 0);
         Vector vector2 = new Vector(1, 1, 0);
         Line line = new Line(vector1, vector2);

@@ -1,10 +1,18 @@
 public class Sphere implements Shape {
     Vector centre;
     double radius;
+    float diffuseCoefficient;
 
-    public Sphere(Vector centre, double radius) {
+    public Sphere(Vector centre, double radius, float diffuseCoefficient) {
         this.centre = centre;
         this.radius = radius;
+        this.diffuseCoefficient = diffuseCoefficient;
+    }
+
+    public Sphere(Vector centre, double radius, double diffuseCoefficient) {
+        this.centre = centre;
+        this.radius = radius;
+        this.diffuseCoefficient = (float)diffuseCoefficient;
     }
 
     public Vector[] intersect(Line line) {
@@ -25,5 +33,9 @@ public class Sphere implements Shape {
 
     public Vector nearestIntersect(ParametricLine line) {
         return intersect(line)[0];
+    }
+
+    public float getDiffuseCoefficient() {
+        return diffuseCoefficient;
     }
 }

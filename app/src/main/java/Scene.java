@@ -2,10 +2,10 @@
 import java.util.ArrayList;
 
 public class Scene {
-    Vector viewpoint;
-    Viewport viewport;
-    ArrayList<Lightsource> lightsources;
-    ArrayList<Shape> shapes;
+    final Vector viewpoint;
+    final Viewport viewport;
+    private ArrayList<Lightsource> lightsources;
+    private ArrayList<Shape> shapes;
 
     public Scene(Lightsource lightsource, Shape shape, Vector viewpoint, Viewport viewport) {
         this.lightsources = new ArrayList<Lightsource>();
@@ -37,24 +37,28 @@ public class Scene {
     }
 
     public void updateBrightnessAtPixel(int x, int y) {
+        Boolean rayHitsSomeShape = false;
         Shape closestShape = shapes.get(0);
         double distanceToClosestShape = Double.POSITIVE_INFINITY;
         for (Shape shape : shapes) {
             Vector viewportVector = viewport.getVector(getPixel(x, y));
             Line rayFromViewToShape = new Line(viewpoint, viewportVector);
             Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape);
+            rayHitsSomeShape = rayHitsSomeShape || !Double.isNaN(pointOnShape.xCoord);
             if (viewpoint.distance(pointOnShape) < distanceToClosestShape) {
                 closestShape = shape;
                 distanceToClosestShape = viewpoint.distance(pointOnShape);
             }
         }
-        updateBrightnessAtPixelForShape(x, y, closestShape);
+        if (rayHitsSomeShape) {
+            updateBrightnessAtPixelForShape(x, y, closestShape);
+        }
     }
 
     public void updateBrightnessAtPixelForShape(int x, int y, Shape shape) {
-        Vector viewportVector = viewport.getVector(getPixel(x, y));
-        Line rayFromViewToShape = new Line(viewpoint, viewportVector);
-        Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape);
+        Vector viewportVector = viewport.getVector(getPixel(x, y)); // Gets calculated twice.
+        Line rayFromViewToShape = new Line(viewpoint, viewportVector); // Gets calculated twice.
+        Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape); // Gets calculated twice.
         for (int i = 0; i < lightsources.size(); i++) {
             Vector locationOfLight = lightsources.get(i).location;
             Line rayFromShapeToLightSource = new Line(pointOnShape, locationOfLight);
@@ -69,8 +73,19 @@ public class Scene {
                 }
             }
             if (canSeeLight) {
-                viewport.getPixel(x, y).addToBrightness(lightsources.get(i));
+                float diffusalFactor = shape.getDiffuseCoefficient();
+                diffusalFactor *= pointOnShape.perpendicularVector(shape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
+                diffusalFactor = Math.max(0, diffusalFactor);
+                viewport.getPixel(x, y).addToBrightness(lightsources.get(i).brightnesses.scalarMultiple(diffusalFactor));
             }
         }
+    }
+
+    public int getScreenHeight() {
+        return viewport.screenHeight;
+    }
+
+    public int getScreenWidth() {
+        return viewport.screenWidth;
     }
 }

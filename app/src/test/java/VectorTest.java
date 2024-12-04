@@ -28,4 +28,11 @@ public class VectorTest {
         Vector vector1 = new Vector(3, 2, 2);
         assertTrue(vector1.scalarMultiple(3).equals(new Vector(9,6,6)));
     }
+
+    @Test
+    public void perpendicularVectorIsCorrect() {
+        Sphere sphere = new Sphere(new Vector(0, 0, 0), 2, 0.5);
+        Vector vector1 = new Vector(0,2,0);
+        assertTrue(vector1.perpendicularVector(sphere).equals(new Vector(0, 1, 0)));
+    }
 }

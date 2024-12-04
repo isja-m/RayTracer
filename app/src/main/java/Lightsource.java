@@ -1,13 +1,9 @@
 public class Lightsource {
     final Vector location;
-    final double redBrightness;
-    final double greenBrightness;
-    final double blueBrightness;
+    final Vector brightnesses;
 
     public Lightsource(Vector location, double redBrightness, double greenBrightness, double blueBrightness) {
         this.location = location;
-        this.redBrightness = redBrightness;
-        this.greenBrightness = greenBrightness;
-        this.blueBrightness = blueBrightness;
+        this.brightnesses = new Vector(redBrightness, greenBrightness, blueBrightness);
     }
 }
