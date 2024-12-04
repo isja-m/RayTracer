@@ -32,8 +32,6 @@ public class Scene {
         for (int i = 0; i < viewport.screenWidth; i++) {
             for (int j = 0; j < viewport.screenHeight; j++) {
                 updateBrightnessAtPixel(i,j);
-                // PixelUpdateThread pixelThread = new PixelUpdateThread(this, i,j);
-                // pixelThread.start();
             }
         }
         System.out.println("Threads are finished.");
@@ -87,7 +85,7 @@ public class Scene {
     private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Vector[] intersectionsWithShape, double distanceFromPointToLight,
             Boolean canSeeLight) {
         for (Vector intersection : intersectionsWithShape) {
-            if (distanceFromPointToLight - intersection.distance(locationOfLight) > 1e-13) {
+            if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
                 canSeeLight = false;
             }
         }

@@ -1,6 +1,6 @@
 public class main {
     public static void main(String[] args) {
-        renderScene1();
+        renderScene2();
     }
 
     private static void renderScene1() {
