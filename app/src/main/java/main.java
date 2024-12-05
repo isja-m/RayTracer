@@ -1,13 +1,13 @@
 public class main {
     public static void main(String[] args) {
-        renderScene2();
+        renderScene1();
     }
 
     private static void renderScene1() {
         Vector corner1 = new Vector(-2, -1, -1);
         Vector corner2 = new Vector(-2, 1, -1);
         Vector corner3 = new Vector(-2, -1, 1);
-        Viewport viewport = new Viewport(corner1, corner2, corner3, 800, 800);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 1000, 1000);
         Vector viewpoint = new Vector(-3, 0, 0);
 
         Sphere sphere1 = new Sphere(2,0,0, 1, 0.5);
@@ -44,8 +44,8 @@ public class main {
 
         Sphere sphere1 = new Sphere(new Vector(0.0, 0.0, 100.0), 200.0, 0.5);
         Sphere sphere2 = new Sphere(new Vector(100.0, 150.0, 130.0), 50, 0.5);
-        Lightsource lightsource1= new Lightsource(new Vector(500.0, 500.0, 155.0), 100, 100, 100);
-        Lightsource lightsource2 = new Lightsource(new Vector(500.0, -100.0, 75.0), 50, 50, 50);
+        Lightsource lightsource1= new Lightsource(new Vector(500.0, 500.0, 155.0), 100, 0, 100);
+        Lightsource lightsource2 = new Lightsource(new Vector(500.0, -100.0, 75.0), 0, 100, 50);
 
         Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
         scene.addShape(sphere2);

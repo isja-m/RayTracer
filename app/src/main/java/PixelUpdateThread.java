@@ -1,25 +1,35 @@
 public class PixelUpdateThread implements Runnable {
     Scene scene;
     Thread thread;
-    int x;
-    int y;
+    int xStart;
+    int xEnd;
+
+    public PixelUpdateThread(Scene scene, int xStart, int xEnd) {
+        this.scene = scene;
+        this.xEnd = xEnd;
+        this.xStart = xStart;
+    }
 
     public void run() {
-        updateBrightnessAtPixel(x, y);
-    }
-    
-    public void start () {
-        System.out.println("Run at " + x + " " + y);
-        if (thread == null) {
-            thread = new Thread (this);
-            thread.start ();
+        for (int i = xStart; i < xEnd; i++) {
+            for (int j = 0; j < scene.getScreenHeight(); j++) {
+                updateBrightnessAtPixel(i,j);
+            }
         }
     }
 
-    public PixelUpdateThread(Scene scene, int x, int y) {
-        this.scene = scene;
-        this.x = x;
-        this.y = y;
+    public void join(){
+        try {
+            thread.join();
+        } catch (Exception e) {
+        }
+    }
+    
+    public void start () {
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
     public void updateBrightnessAtPixel(int x, int y) {
@@ -29,6 +39,8 @@ public class PixelUpdateThread implements Runnable {
         Vector viewportVector = scene.viewport.getVector(scene.getPixel(x, y));
         Line finalRayFromViewToShape = null;
         Vector finalPointOnShape = null;
+
+        // Find closest shape.
         for (Shape shape : scene.shapes) {
             Line rayFromViewToShape = new Line(scene.viewpoint, viewportVector);
             Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape);
@@ -40,6 +52,7 @@ public class PixelUpdateThread implements Runnable {
                 finalPointOnShape = pointOnShape;
             }
         }
+
         if (rayHitsSomeShape) {
             updateBrightnessAtPixelForShape(x, y, closestShape, viewportVector, finalRayFromViewToShape, finalPointOnShape);
         }
@@ -54,18 +67,39 @@ public class PixelUpdateThread implements Runnable {
             double distanceFromPointToLight = pointOnShape.distance(locationOfLight);
 
             Boolean canSeeLight = true;
-            for (Vector intersection : intersectionsWithShape) {
-                double distance = intersection.distance(locationOfLight);
-                if (distanceFromPointToLight - intersection.distance(locationOfLight) > 1e-13) {
-                    canSeeLight = false;
-                }
-            }
+            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersectionsWithShape, distanceFromPointToLight, canSeeLight);
+            
+            canSeeLight = otherShapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, distanceFromPointToLight, canSeeLight);
+
             if (canSeeLight) {
-                float diffusalFactor = shape.getDiffuseCoefficient();
-                diffusalFactor *= pointOnShape.perpendicularVector(shape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
-                diffusalFactor = Math.max(0, diffusalFactor);
-                scene.viewport.getPixel(x, y).addToBrightness(scene.lightsources.get(i).brightnesses.scalarMultiple(diffusalFactor));
+                addBrightness(x, y, shape, pointOnShape, scene.lightsources.get(i).brightnesses, rayFromShapeToLightSource);
             }
         }
     }
+
+    private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Vector[] intersectionsWithShape, double distanceFromPointToLight,
+            Boolean canSeeLight) {
+        for (Vector intersection : intersectionsWithShape) {
+            if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
+                canSeeLight = false;
+            }
+        }
+        return canSeeLight;
+    }
+
+    private Boolean otherShapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, double distanceFromPointToLight,
+            Boolean canSeeLight) {
+        for (Shape otherShape : scene.shapes) {
+            Vector[] intersections = otherShape.intersect(rayFromShapeToLightSource);
+            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersections, distanceFromPointToLight, canSeeLight);
+        }
+        return canSeeLight;
+    }
+
+    private void addBrightness(int x, int y, Shape shape, Vector pointOnShape, Vector brightnesses, Line rayFromShapeToLightSource) {
+        float diffusalFactor = shape.getDiffuseCoefficient();
+        diffusalFactor *= pointOnShape.perpendicularVector(shape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
+        diffusalFactor = Math.max(0, diffusalFactor);
+        scene.viewport.getPixel(x, y).addToBrightness(brightnesses.scalarMultiple(diffusalFactor));
+}
 }

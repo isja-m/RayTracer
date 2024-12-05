@@ -6,6 +6,7 @@ public class Scene {
     final Viewport viewport;
     ArrayList<Lightsource> lightsources;
     ArrayList<Shape> shapes;
+    final private int threadCount = 4;
 
     public Scene(Lightsource lightsource, Shape shape, Vector viewpoint, Viewport viewport) {
         this.lightsources = new ArrayList<Lightsource>();
@@ -28,11 +29,18 @@ public class Scene {
         return viewport.getPixel(x,y);
     }
 
-    public void updateBrightness() {
-        for (int i = 0; i < viewport.screenWidth; i++) {
-            for (int j = 0; j < viewport.screenHeight; j++) {
-                updateBrightnessAtPixel(i,j);
-            }
+    public void updateBrightness(){
+        int numberOfCols = (int)Math.ceil((double)getScreenHeight()/(double)threadCount);
+        PixelUpdateThread[] threads = new PixelUpdateThread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            PixelUpdateThread pixelThread = new PixelUpdateThread(this, i*numberOfCols,Math.min((i+1)*numberOfCols, getScreenWidth()));
+            pixelThread.start();
+            threads[i] = pixelThread;
+        }
+
+        // Wait for all threads to finish
+        for (int i = 0; i < threadCount; i++) {
+            threads[i].join();
         }
         System.out.println("Threads are finished.");
     }
