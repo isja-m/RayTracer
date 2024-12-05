@@ -9,7 +9,7 @@ public class Line {
     }
 
     public ParametricLine getParametricLine() {
-        Vector direction = point2.add(point1.scalarMultiple(-1));
+        Vector direction = point2.subtract(point1);
         double normalizationFactor = 1/direction.norm();
         Vector normalizedDirection = direction.scalarMultiple(normalizationFactor);
         return new ParametricLine(point1, normalizedDirection);

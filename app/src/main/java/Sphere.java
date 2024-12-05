@@ -25,7 +25,7 @@ public class Sphere implements Shape {
 
     public Vector[] intersect(ParametricLine line) {
         double calculationPart1 = line.direction.dotProduct(line.start.add(centre.scalarMultiple(-1)));
-        double calculationPart2 = line.start.add(centre.scalarMultiple(-1)).squaredNorm() - radius*radius;
+        double calculationPart2 = line.start.subtract(centre).squaredNorm() - radius*radius;
         double distance1 = -calculationPart1 - Math.sqrt(Math.pow(calculationPart1,2) - calculationPart2);
         double distance2 = -calculationPart1 + Math.sqrt(Math.pow(calculationPart1,2) - calculationPart2);
         return new Vector[] {line.start.add(line.direction.scalarMultiple(distance1)), line.start.add(line.direction.scalarMultiple(distance2))};

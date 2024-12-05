@@ -35,4 +35,43 @@ public class VectorTest {
         Vector vector1 = new Vector(0,2,0);
         assertTrue(vector1.perpendicularVector(sphere).equals(new Vector(0, 1, 0)));
     }
+
+    @Test
+    public void horizontalRotateIsCorrect() {
+        Vector vector1 = new Vector(2, 0, 0);
+        assertTrue(vector1.horizontalRotate(Math.PI/2).equals(new Vector(0, 0, 2)));
+    }
+
+    @Test
+    public void horizontalPivotAroundIsCorrect() {
+        Vector vector1 = new Vector(2, 0, 0);
+        Vector origin = new Vector(0, 0, 0);
+        assertTrue(origin.horizontalPivotAround(vector1, Math.PI/2).equals(new Vector(2, 0, -2)));
+    }
+
+    @Test
+    public void horizontalRotateWithNonzeroYIsCorrect() {
+        Vector vector1 = new Vector(2, 1, 0);
+        assertTrue(vector1.horizontalRotate(Math.PI/2).equals(new Vector(0, 1, 2)));
+    }
+
+    @Test
+    public void horizontalPivotAroundWithNonzeroYIsCorrect() {
+        Vector vector1 = new Vector(2, 1, 0);
+        Vector origin = new Vector(0, 0, 0);
+        assertTrue(origin.horizontalPivotAround(vector1, Math.PI/2).equals(new Vector(2, 0, -2)));
+    }
+
+    @Test
+    public void verticalRotateIsCorrect() {
+        Vector vector1 = new Vector(1, 1, 0);
+        assertTrue(vector1.verticalRotate(Math.PI/4).equals(new Vector(Math.sqrt(2), 0, 0)));
+    }
+
+    @Test
+    public void verticalPivotAroundIsCorrect() {
+        Vector vector1 = new Vector(1, 1, 0);
+        Vector origin = new Vector(0, 0, 0);
+        assertTrue(origin.verticalPivotAround(vector1, Math.PI/4).equals(new Vector(1-Math.sqrt(2), 1, 0)));
+    }
 }

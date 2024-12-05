@@ -5,7 +5,7 @@ public class Scene {
     Viewport viewport;
     ArrayList<Lightsource> lightsources;
     ArrayList<Shape> shapes;
-    final private int threadCount = 16;
+    final private int threadCount = 4;
 
     public Scene(Lightsource lightsource, Shape shape, Vector viewpoint, Viewport viewport) {
         this.lightsources = new ArrayList<Lightsource>();
@@ -37,9 +37,27 @@ public class Scene {
         viewport = new Viewport(corner1, corner2, corner3, viewport.screenWidth, viewport.screenHeight);
     }
 
-    // public void cameraPivot(double rightRotate, double upRotate) {
+    public void cameraRotate(double rightRotate, double upRotate) {
+        Vector newCorner1 = viewport.corner1.horizontalPivotAround(viewpoint, rightRotate);
+        Vector newCorner2 = viewport.corner2.horizontalPivotAround(viewpoint, rightRotate);
+        Vector newCorner3 = viewport.corner3.horizontalPivotAround(viewpoint, rightRotate);
+        newCorner1 = newCorner1.verticalPivotAround(viewpoint, -upRotate);
+        newCorner2 = newCorner2.verticalPivotAround(viewpoint, -upRotate);
+        newCorner3 = newCorner3.verticalPivotAround(viewpoint, -upRotate);
+        viewport = new Viewport(newCorner1, newCorner2, newCorner3, getScreenWidth(), getScreenHeight());
+    }
 
-    // }
+    public void cameraPivotAroundPoint(Vector pivotPoint, double rightRotate, double upRotate) {
+        Vector newCorner1 = viewport.corner1.horizontalPivotAround(pivotPoint, rightRotate);
+        Vector newCorner2 = viewport.corner2.horizontalPivotAround(pivotPoint, rightRotate);
+        Vector newCorner3 = viewport.corner3.horizontalPivotAround(pivotPoint, rightRotate);
+        viewpoint = viewpoint.horizontalPivotAround(pivotPoint, rightRotate);
+        newCorner1 = newCorner1.verticalPivotAround(pivotPoint, -upRotate);
+        newCorner2 = newCorner2.verticalPivotAround(pivotPoint, -upRotate);
+        newCorner3 = newCorner3.verticalPivotAround(pivotPoint, -upRotate);
+        viewpoint = viewpoint.verticalPivotAround(pivotPoint, -upRotate);
+        viewport = new Viewport(newCorner1, newCorner2, newCorner3, getScreenWidth(), getScreenHeight());
+    }
 
     public void updateBrightness(){
         int numberOfCols = (int)Math.ceil((double)getScreenHeight()/(double)threadCount);

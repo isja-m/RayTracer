@@ -11,9 +11,9 @@ public class Viewport {
     public Viewport(Vector corner1, Vector corner2, Vector corner3, int screenWidth, int screenHeight) {
         this.corner1 = corner1;
         this.corner2 = corner2;
-        this.verticalDirection = corner2.add(corner1.scalarMultiple(-1));
+        this.verticalDirection = corner2.subtract(corner1);
         this.corner3 = corner3;
-        this.horizontalDirection = corner3.add(corner1.scalarMultiple(-1));
+        this.horizontalDirection = corner3.subtract(corner1);
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         generatePixels(screenWidth, screenHeight);

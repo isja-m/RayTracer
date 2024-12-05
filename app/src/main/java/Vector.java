@@ -22,12 +22,20 @@ public class Vector {
     }
     
     public Boolean equals(Vector vector2) {
-        return Math.abs(this.xCoord - vector2.xCoord) < 1e-13 && Math.abs(this.yCoord - vector2.yCoord) < 1e-13 
-            && Math.abs(this.zCoord - vector2.zCoord) < 1e-13;
+        return equals(vector2, 1e-13);
+    }
+    
+    public Boolean equals(Vector vector2, double errorMargin) {
+        return Math.abs(this.xCoord - vector2.xCoord) < errorMargin && Math.abs(this.yCoord - vector2.yCoord) < errorMargin 
+            && Math.abs(this.zCoord - vector2.zCoord) < errorMargin;
     }
 
     public Vector add(Vector vector2) {
         return new Vector(this.xCoord + vector2.xCoord, this.yCoord + vector2.yCoord, this.zCoord + vector2.zCoord);
+    }
+
+    public Vector subtract(Vector vector2) {
+        return this.add(vector2.scalarMultiple(-1));
     }
 
     public Vector scalarMultiple(double lambda) {
@@ -35,7 +43,7 @@ public class Vector {
     }
 
     public double distance(Vector vector2) {
-        return this.add(vector2.scalarMultiple(-1)).norm();
+        return this.subtract(vector2).norm();
     }
 
     public Vector perpendicularVector(Shape shape) {
@@ -48,5 +56,30 @@ public class Vector {
     public Vector perpendicularVector(Sphere sphere) {
         Line perpendicularLine = new Line(sphere.centre, this);
         return perpendicularLine.getParametricLine().direction;
+    }
+
+    public Vector horizontalPivotAround(Vector pivotPoint, double angle) {
+        double distanceToNewLocation = 2 * Math.sin(-angle/2);
+        Vector direction = new Vector(pivotPoint.xCoord - xCoord, 0, pivotPoint.zCoord - zCoord).horizontalRotate(Math.PI/2 + angle/2);
+        return this.add(direction.scalarMultiple(distanceToNewLocation));
+    }
+
+    public Vector horizontalRotate(double angle) {
+        double newXCoord = Math.cos(angle) * xCoord - Math.sin(angle) * zCoord;
+        double newZCoord = Math.sin(angle) * xCoord + Math.cos(angle) * zCoord;
+        return new Vector(newXCoord, yCoord, newZCoord);
+    }
+
+    public Vector verticalPivotAround(Vector pivotPoint, double angle) {
+        double distanceToNewLocation = 2 * Math.sin(-angle/2) * distance(pivotPoint);
+        Vector direction = pivotPoint.subtract(this).verticalRotate(Math.PI/2 + angle/2);
+        return this.add(direction.scalarMultiple(distanceToNewLocation/distance(pivotPoint)));
+    }
+
+    public Vector verticalRotate(double angle) { //Add axis perpendicular to rotation as input.
+        double horizontalLength = Math.sqrt(xCoord*xCoord + zCoord*zCoord);
+        double newYCoord = Math.cos(angle) * yCoord - Math.sin(angle) * horizontalLength;
+        double horizontalScalar = Math.sin(angle) * yCoord/horizontalLength + Math.cos(angle);
+        return new Vector(xCoord * horizontalScalar, newYCoord, zCoord * horizontalScalar);
     }
 }
