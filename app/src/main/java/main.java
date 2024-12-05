@@ -1,3 +1,4 @@
+
 public class main {
     public static void main(String[] args) {
         renderScene1();
@@ -33,6 +34,11 @@ public class main {
 
         Renderer renderer = new Renderer(scene);
         renderer.update();
+        for (int i = 0; i < 10; i++) {
+            scene.cameraStrafe(0.1, 0.1, 0);
+            scene.updateBrightness();
+            renderer.update();
+        }
     }
 
     private static void renderScene2() {
@@ -44,8 +50,8 @@ public class main {
 
         Sphere sphere1 = new Sphere(new Vector(0.0, 0.0, 100.0), 200.0, 0.5);
         Sphere sphere2 = new Sphere(new Vector(100.0, 150.0, 130.0), 50, 0.5);
-        Lightsource lightsource1= new Lightsource(new Vector(500.0, 500.0, 155.0), 100, 0, 100);
-        Lightsource lightsource2 = new Lightsource(new Vector(500.0, -100.0, 75.0), 0, 100, 50);
+        Lightsource lightsource1= new Lightsource(new Vector(500.0, 500.0, 155.0), 100, 100, 100);
+        Lightsource lightsource2 = new Lightsource(new Vector(500.0, -100.0, 75.0), 50, 50, 50);
 
         Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
         scene.addShape(sphere2);

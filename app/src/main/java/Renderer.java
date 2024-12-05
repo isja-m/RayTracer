@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,6 +29,10 @@ public class Renderer {
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.repaint();
         frame.setVisible(true);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (Exception e) {
+        }
         }
 }
 

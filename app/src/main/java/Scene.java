@@ -1,12 +1,11 @@
-
 import java.util.ArrayList;
 
 public class Scene {
-    final Vector viewpoint;
-    final Viewport viewport;
+    Vector viewpoint;
+    Viewport viewport;
     ArrayList<Lightsource> lightsources;
     ArrayList<Shape> shapes;
-    final private int threadCount = 4;
+    final private int threadCount = 16;
 
     public Scene(Lightsource lightsource, Shape shape, Vector viewpoint, Viewport viewport) {
         this.lightsources = new ArrayList<Lightsource>();
@@ -29,6 +28,19 @@ public class Scene {
         return viewport.getPixel(x,y);
     }
 
+    public void cameraStrafe(double xDireciton, double yDirection, double zDirection) {
+        Vector strafeDirection = new Vector(xDireciton, yDirection, zDirection);
+        viewpoint = viewpoint.add(strafeDirection);
+        Vector corner1 = viewport.corner1.add(strafeDirection);
+        Vector corner2 = viewport.corner2.add(strafeDirection);
+        Vector corner3 = viewport.corner3.add(strafeDirection);
+        viewport = new Viewport(corner1, corner2, corner3, viewport.screenWidth, viewport.screenHeight);
+    }
+
+    // public void cameraPivot(double rightRotate, double upRotate) {
+
+    // }
+
     public void updateBrightness(){
         int numberOfCols = (int)Math.ceil((double)getScreenHeight()/(double)threadCount);
         PixelUpdateThread[] threads = new PixelUpdateThread[threadCount];
@@ -42,7 +54,6 @@ public class Scene {
         for (int i = 0; i < threadCount; i++) {
             threads[i].join();
         }
-        System.out.println("Threads are finished.");
     }
 
     public void updateBrightnessAtPixel(int x, int y) {
