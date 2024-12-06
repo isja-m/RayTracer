@@ -28,6 +28,10 @@ public class Scene {
         return viewport.getPixel(x,y);
     }
 
+    public void cameraStrafe(Vector strafeVector) {
+        cameraStrafe(strafeVector.xCoord, strafeVector.yCoord, strafeVector.zCoord);
+    }
+
     public void cameraStrafe(double xDireciton, double yDirection, double zDirection) {
         Vector strafeDirection = new Vector(xDireciton, yDirection, zDirection);
         viewpoint = viewpoint.add(strafeDirection);

@@ -1,7 +1,7 @@
 
 public class main {
     public static void main(String[] args) {
-        renderScene6();
+        renderScene1();
     }
 
     private static void renderScene1() {
@@ -32,17 +32,17 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);
 
-        scene.updateBrightness();
-
         Renderer renderer = new Renderer(scene);
-        renderer.update();
-        for (int i = 0; i < 50; i++) {
-            scene.cameraStrafe(0, 0, 0);
-            scene.cameraPivotAroundPoint(new Vector(2, 0, 0), Math.PI/40, 0);
-            scene.updateBrightness();
-            renderer.update();
-            // System.out.println(scene.viewport.corner1.distance(new Vector(2,0,0)));
-        }
+        CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
+        cameraOperator.run();
+        // scene.updateBrightness();
+        // renderer.update();
+        // for (int i = 0; i < 50; i++) {
+        //     scene.cameraStrafe(0, 0, 0);
+        //     scene.cameraPivotAroundPoint(new Vector(2, 0, 0), Math.PI/40, 0);
+        //     scene.updateBrightness();
+        //     renderer.update();
+        // }
     }
 
     private static void renderScene2() {
@@ -183,14 +183,12 @@ public class main {
             scene.cameraRotate(0, Math.PI/40);
             scene.updateBrightness();
             renderer.update();
-            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
         }
         for (int i = 0; i < 10; i++) {
             scene.cameraStrafe(0, 0, 0);
             scene.cameraRotate(0, -Math.PI/40);
             scene.updateBrightness();
             renderer.update();
-            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
         }
     }
 
@@ -224,13 +222,11 @@ public class main {
             scene.cameraPivotAroundPoint(new Vector(0, 0, 0), 0, Math.PI/40);
             scene.updateBrightness();
             renderer.update();
-            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
         }
         for (int i = 0; i < 10; i++) {
             scene.cameraPivotAroundPoint(new Vector(0, 0, 0), 0, -Math.PI/40);
             scene.updateBrightness();
             renderer.update();
-            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
         }
     }
 
