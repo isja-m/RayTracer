@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
 public class CameraOperator {
-    Scanner scanner;
-    Scene scene;
-    Renderer renderer;
-    double strafeSpeed;
-    double rotateSpeed;
+    private Scanner scanner;
+    private Scene scene;
+    private Renderer renderer;
+    private double strafeSpeed;
+    private double rotateSpeed;
 
     public CameraOperator(Scene scene, Renderer renderer, double rotateSpeed, double strafeSpeed) {
         this.scanner = new Scanner(System.in);
@@ -21,6 +21,14 @@ public class CameraOperator {
 
         Boolean running = true;
         String input;
+
+        System.out.println("Please enter 1 character at a time.");
+        System.out.println("Use 'a' and 'd' to strafe left and right.");
+        System.out.println("Use 'w' and 's' to strafe forward and backward.");
+        System.out.println("Use 'q' and 'e' to strafe down and up.");
+        System.out.println("Use 'j' and 'l' to rotate left and right.");
+        System.out.println("Use 'i' and 'k' to rotate up and down.");
+        System.out.println("Close the window to stop the program.");
 
         while (running) {
             input = scanner.nextLine();
@@ -57,37 +65,37 @@ public class CameraOperator {
     }
 
     private void strafeLeft() {
-        Vector strafeDirection = scene.viewport.horizontalDirection.normalize();
+        Vector strafeDirection = scene.getHorizontalDirection().normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(-strafeSpeed));
         updateScene();
     }
 
     private void strafeRight() {
-        Vector strafeDirection = scene.viewport.horizontalDirection.normalize();
+        Vector strafeDirection = scene.getHorizontalDirection().normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(strafeSpeed));
         updateScene();
     }
 
     private void strafeDown() {
-        Vector strafeDirection = scene.viewport.verticalDirection.normalize();
+        Vector strafeDirection = scene.getVerticalDirection().normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(strafeSpeed));
         updateScene();
     }
 
     private void strafeUp() {
-        Vector strafeDirection = scene.viewport.verticalDirection.normalize();
+        Vector strafeDirection = scene.getVerticalDirection().normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(-strafeSpeed));
         updateScene();
     }
 
     private void strafeForward() {
-        Vector strafeDirection = scene.viewport.verticalDirection.crossProduct(scene.viewport.horizontalDirection).normalize();
+        Vector strafeDirection = scene.getVerticalDirection().crossProduct(scene.getHorizontalDirection()).normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(strafeSpeed));
         updateScene();
     }
 
     private void strafeBackward() {
-        Vector strafeDirection = scene.viewport.verticalDirection.crossProduct(scene.viewport.horizontalDirection).normalize();
+        Vector strafeDirection = scene.getVerticalDirection().crossProduct(scene.getHorizontalDirection()).normalize();
         scene.cameraStrafe(strafeDirection.scalarMultiple(-strafeSpeed));
         updateScene();
     }

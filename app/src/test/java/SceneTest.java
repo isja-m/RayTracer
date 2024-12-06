@@ -36,13 +36,13 @@ public class SceneTest {
 
     @Test
     public void detectBrightnessAtBrightVisiblePoint() {
-        scene.updateBrightnessAtPixel(230,320);
+        scene.updateBrightness();
         assertTrue(scene.getPixel(230,320).getBrightness()[0] > 0);
     }
 
     @Test
     public void doNotDetectBrightnessAtDarkVisiblePoint() {
-        scene.updateBrightnessAtPixel(250,320);
+        scene.updateBrightness();
         assertFalse(scene.getPixel(250,320).getBrightness()[0] > 0);
     }
 
@@ -54,7 +54,7 @@ public class SceneTest {
 
     @Test
     public void doNotDetectBrightnessIfNoShapeIsHit() {
-        scene.updateBrightnessAtPixel(0,0);
+        scene.updateBrightness();
         assertFalse(scene.getPixel(0, 0).getBrightness()[0] > 0);
     }
 
@@ -65,7 +65,7 @@ public class SceneTest {
         Lightsource lightsource2 = new Lightsource(new Vector(0, 0, -20), 100,0,0);
         Scene scene2 = new Scene(lightsource2, sphere1, viewpoint, viewport2);
         scene2.addShape(new Sphere(0,0,-4,2,0.5));
-        scene2.updateBrightnessAtPixel(240,250);
+        scene2.updateBrightness();
         assertEquals(0,scene2.getPixel(240, 250).getBrightness()[0]);
     }
 }

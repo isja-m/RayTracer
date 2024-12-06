@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 public class Scene {
-    Vector viewpoint;
-    Viewport viewport;
-    ArrayList<Lightsource> lightsources;
-    ArrayList<Shape> shapes;
+    private Vector viewpoint;
+    private Viewport viewport;
+    private ArrayList<Lightsource> lightsources;
+    private ArrayList<Shape> shapes;
     final private int threadCount = 4;
 
     public Scene(Lightsource lightsource, Shape shape, Vector viewpoint, Viewport viewport) {
@@ -24,10 +24,6 @@ public class Scene {
         lightsources.add(lightsource);
     }
 
-    public Pixel getPixel(int x, int y) {
-        return viewport.getPixel(x,y);
-    }
-
     public void cameraStrafe(Vector strafeVector) {
         cameraStrafe(strafeVector.xCoord, strafeVector.yCoord, strafeVector.zCoord);
     }
@@ -42,13 +38,12 @@ public class Scene {
     }
 
     public void cameraRotate(double rightRotate, double upRotate) {
+        // Horizontal rotate.
         Vector newCorner1 = viewport.corner1.horizontalPivotAround(viewpoint, rightRotate);
         Vector newCorner2 = viewport.corner2.horizontalPivotAround(viewpoint, rightRotate);
         Vector newCorner3 = viewport.corner3.horizontalPivotAround(viewpoint, rightRotate);
-        Vector middleOfScreen = newCorner2.add(newCorner3).scalarMultiple(0.5);
-        // Vector verticalRotationAxis = new Vector(viewpoint.xCoord-middleOfScreen.xCoord, 0, viewpoint.zCoord-middleOfScreen.zCoord);
-        // verticalRotationAxis = verticalRotationAxis.horizontalRotate(Math.PI/2);
-        // verticalRotationAxis = verticalRotationAxis.scalarMultiple(1/verticalRotationAxis.norm());
+        
+        // Vertical rotate.
         Vector verticalRotationAxis = viewport.horizontalDirection.normalize();
         newCorner1 = newCorner1.verticalPivotAround(viewpoint, verticalRotationAxis, upRotate);
         newCorner2 = newCorner2.verticalPivotAround(viewpoint, verticalRotationAxis, upRotate);
@@ -57,10 +52,13 @@ public class Scene {
     }
 
     public void cameraPivotAroundPoint(Vector pivotPoint, double rightRotate, double upRotate) {
+        // Horizontal pivot.
         Vector newCorner1 = viewport.corner1.horizontalPivotAround(pivotPoint, rightRotate);
         Vector newCorner2 = viewport.corner2.horizontalPivotAround(pivotPoint, rightRotate);
         Vector newCorner3 = viewport.corner3.horizontalPivotAround(pivotPoint, rightRotate);
         viewpoint = viewpoint.horizontalPivotAround(pivotPoint, rightRotate);
+
+        // Vertical pivot.
         Vector verticalRotationAxis = new Vector(pivotPoint.xCoord-viewpoint.xCoord, 0, pivotPoint.zCoord-viewpoint.zCoord);
         verticalRotationAxis = verticalRotationAxis.horizontalRotate(Math.PI/2);
         verticalRotationAxis = verticalRotationAxis.normalize();
@@ -86,82 +84,47 @@ public class Scene {
         }
     }
 
-    public void updateBrightnessAtPixel(int x, int y) {
-        Boolean rayHitsSomeShape = false;
-        Shape closestShape = shapes.get(0);
-        double distanceToClosestShape = Double.POSITIVE_INFINITY;
-        Vector viewportVector = viewport.getVector(getPixel(x, y));
-        Line finalRayFromViewToShape = null;
-        Vector finalPointOnShape = null;
-
-        // Find closest shape.
-        for (Shape shape : shapes) {
-            Line rayFromViewToShape = new Line(viewpoint, viewportVector);
-            Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape);
-            rayHitsSomeShape = rayHitsSomeShape || !Double.isNaN(pointOnShape.xCoord);
-            if (viewpoint.distance(pointOnShape) < distanceToClosestShape) {
-                closestShape = shape;
-                distanceToClosestShape = viewpoint.distance(pointOnShape);
-                finalRayFromViewToShape = rayFromViewToShape;
-                finalPointOnShape = pointOnShape;
-            }
-        }
-
-        if (rayHitsSomeShape) {
-            updateBrightnessAtPixelForShape(x, y, closestShape, viewportVector, finalRayFromViewToShape, finalPointOnShape);
-        }
-    }
-
-    public void updateBrightnessAtPixelForShape(int x, int y, Shape shape, Vector viewportVector, Line rayFromViewToShape,
-        Vector pointOnShape) {
-        for (int i = 0; i < lightsources.size(); i++) {
-            Vector locationOfLight = lightsources.get(i).location;
-            Line rayFromShapeToLightSource = new Line(pointOnShape, locationOfLight);
-            Vector[] intersectionsWithShape = shape.intersect(rayFromShapeToLightSource);
-            double distanceFromPointToLight = pointOnShape.distance(locationOfLight);
-
-            Boolean canSeeLight = true;
-            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersectionsWithShape, distanceFromPointToLight, canSeeLight);
-            
-            canSeeLight = otherShapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, distanceFromPointToLight, canSeeLight);
-
-            if (canSeeLight) {
-                addBrightness(x, y, shape, pointOnShape, lightsources.get(i).brightnesses, rayFromShapeToLightSource);
-            }
-        }
-    }
-
-    private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Vector[] intersectionsWithShape, double distanceFromPointToLight,
-            Boolean canSeeLight) {
-        for (Vector intersection : intersectionsWithShape) {
-            if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
-                canSeeLight = false;
-            }
-        }
-        return canSeeLight;
-    }
-
-    private Boolean otherShapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, double distanceFromPointToLight,
-            Boolean canSeeLight) {
-        for (Shape otherShape : shapes) {
-            Vector[] intersections = otherShape.intersect(rayFromShapeToLightSource);
-            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersections, distanceFromPointToLight, canSeeLight);
-        }
-        return canSeeLight;
-    }
-
-    private void addBrightness(int x, int y, Shape shape, Vector pointOnShape, Vector brightnesses, Line rayFromShapeToLightSource) {
-        float diffusalFactor = shape.getDiffuseCoefficient();
-        diffusalFactor *= pointOnShape.perpendicularVector(shape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
-        diffusalFactor = Math.max(0, diffusalFactor);
-        viewport.getPixel(x, y).addToBrightness(brightnesses.scalarMultiple(diffusalFactor));
-}
-
     public int getScreenHeight() {
         return viewport.screenHeight;
     }
 
     public int getScreenWidth() {
         return viewport.screenWidth;
+    }
+
+    public Vector getViewpoint() {
+        return viewpoint;
+    }
+
+    public Viewport getViewport() {
+        return viewport;
+    }
+
+    public Vector getHorizontalDirection() {
+        return viewport.horizontalDirection;
+    }
+
+    public Vector getVerticalDirection() {
+        return viewport.verticalDirection;
+    }
+
+    public Vector getVectorAtPixel(int x, int y) {
+        return viewport.getVector(getPixel(x, y));
+    }
+
+    public Pixel getPixel(int x, int y) {
+        return viewport.getPixel(x,y);
+    }
+
+    public int getNumberOfLights() {
+        return lightsources.size();
+    }
+
+    public Lightsource getLightsource(int i) {
+        return lightsources.get(i);
+    }
+
+    public ArrayList<Shape> getShapes() {
+        return shapes;
     }
 }

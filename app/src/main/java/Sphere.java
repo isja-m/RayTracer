@@ -1,7 +1,7 @@
 public class Sphere implements Shape {
-    Vector centre;
-    double radius;
-    float diffuseCoefficient;
+    final Vector centre;
+    final double radius;
+    final float diffuseCoefficient;
 
     public Sphere(Vector centre, double radius, float diffuseCoefficient) {
         this.centre = centre;

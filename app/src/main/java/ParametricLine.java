@@ -1,4 +1,4 @@
-public class ParametricLine {
+class ParametricLine {
     final Vector start;
     final Vector direction;
 
@@ -6,14 +6,15 @@ public class ParametricLine {
         this.start = start;
         this.direction = direction;
     }
-    public double angle(ParametricLine line2) {
+
+    double angle(ParametricLine line2) {
         double dotProd = this.direction.dotProduct(line2.direction);
         double norm1 = this.direction.norm(); 
         double norm2 = line2.direction.norm(); 
         return Math.acos(dotProd/(norm1 * norm2));
     }
 
-    public Intersection findIntersection(ParametricLine line2) {
+    Intersection findIntersection(ParametricLine line2) {
         /* Calculate the scalar lambda that gives the intersection as 'this.origin + lambda * this.direction'.
          * The calculations are obtained by rearanging the the expression 'intersection = this.start + lambda * this.direction
          * = line2.start + mu * line2.direction' and eliminating mu.

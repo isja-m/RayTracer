@@ -1,4 +1,4 @@
-public class Pixel {
+class Pixel {
     final int xCoord;
     final int yCoord;
     private Vector brightnesses;

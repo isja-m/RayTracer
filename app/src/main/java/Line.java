@@ -1,5 +1,4 @@
-
-public class Line {
+class Line {
     final Vector point1;
     final Vector point2;
 

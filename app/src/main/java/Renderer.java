@@ -8,13 +8,13 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class Renderer {
-    RenderPanel panel;
-    JFrame frame;
-    int width;
-    int height;
-    Scene scene;
+    private RenderPanel panel;
+    final private JFrame frame;
+    final private int width;
+    final private int height;
+    final private Scene scene;
 
-    Renderer(Scene scene) {
+    public Renderer(Scene scene) {
         frame = new JFrame("Test");
         this.scene = scene;
         this.width = scene.getScreenWidth();
@@ -29,15 +29,15 @@ public class Renderer {
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.repaint();
         frame.setVisible(true);
-        try {
+        try { // Wait to avoid graphical glitches.
             TimeUnit.MILLISECONDS.sleep(500);
         } catch (Exception e) {
         }
-        }
+    }
 }
 
 class RenderPanel extends JPanel {
-    Scene scene; //constructor!
+    Scene scene;
 
     RenderPanel(Scene scene) {
         this.scene = scene;
@@ -50,13 +50,17 @@ class RenderPanel extends JPanel {
 
         for (int i = 0; i < scene.getScreenWidth(); i++) {
             for (int j = 0; j < scene.getScreenHeight(); j++) {
-                int redValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(i, j).getBrightness()[0]/100)));
-                int greenValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(i, j).getBrightness()[1]/100)));
-                int blueValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(i, j).getBrightness()[2]/100)));
-                Color pixelColor = new Color(redValue, greenValue, blueValue);
-                g.setColor(pixelColor);
-                g.drawLine(i,j,i,j);
+                paintPixel(g, i, j);
             }
         }
+    }
+
+    private void paintPixel(Graphics g, int xCoord, int yCoord) {
+        int redValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(xCoord, yCoord).getBrightness()[0]/100)));
+        int greenValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(xCoord, yCoord).getBrightness()[1]/100)));
+        int blueValue = Math.max(0, (int)Math.min(255, (int)Math.round(255*scene.getPixel(xCoord, yCoord).getBrightness()[2]/100)));
+        Color pixelColor = new Color(redValue, greenValue, blueValue);
+        g.setColor(pixelColor);
+        g.drawLine(xCoord,yCoord,xCoord,yCoord);
     }
 }
