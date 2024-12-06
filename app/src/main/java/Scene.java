@@ -31,17 +31,17 @@ public class Scene {
     public void cameraStrafe(double xDireciton, double yDirection, double zDirection) {
         Vector strafeDirection = new Vector(xDireciton, yDirection, zDirection);
         viewpoint = viewpoint.add(strafeDirection);
-        Vector corner1 = viewport.corner1.add(strafeDirection);
-        Vector corner2 = viewport.corner2.add(strafeDirection);
-        Vector corner3 = viewport.corner3.add(strafeDirection);
+        Vector corner1 = viewport.bottomLeftCorner.add(strafeDirection);
+        Vector corner2 = viewport.topLeftCorner.add(strafeDirection);
+        Vector corner3 = viewport.bottomRightCorner.add(strafeDirection);
         viewport = new Viewport(corner1, corner2, corner3, viewport.screenWidth, viewport.screenHeight);
     }
 
     public void cameraRotate(double rightRotate, double upRotate) {
         // Horizontal rotate.
-        Vector newCorner1 = viewport.corner1.horizontalPivotAround(viewpoint, rightRotate);
-        Vector newCorner2 = viewport.corner2.horizontalPivotAround(viewpoint, rightRotate);
-        Vector newCorner3 = viewport.corner3.horizontalPivotAround(viewpoint, rightRotate);
+        Vector newCorner1 = viewport.bottomLeftCorner.horizontalPivotAround(viewpoint, rightRotate);
+        Vector newCorner2 = viewport.topLeftCorner.horizontalPivotAround(viewpoint, rightRotate);
+        Vector newCorner3 = viewport.bottomRightCorner.horizontalPivotAround(viewpoint, rightRotate);
         
         // Vertical rotate.
         Vector verticalRotationAxis = viewport.horizontalDirection.normalize();
@@ -53,9 +53,9 @@ public class Scene {
 
     public void cameraPivotAroundPoint(Vector pivotPoint, double rightRotate, double upRotate) {
         // Horizontal pivot.
-        Vector newCorner1 = viewport.corner1.horizontalPivotAround(pivotPoint, rightRotate);
-        Vector newCorner2 = viewport.corner2.horizontalPivotAround(pivotPoint, rightRotate);
-        Vector newCorner3 = viewport.corner3.horizontalPivotAround(pivotPoint, rightRotate);
+        Vector newCorner1 = viewport.bottomLeftCorner.horizontalPivotAround(pivotPoint, rightRotate);
+        Vector newCorner2 = viewport.topLeftCorner.horizontalPivotAround(pivotPoint, rightRotate);
+        Vector newCorner3 = viewport.bottomRightCorner.horizontalPivotAround(pivotPoint, rightRotate);
         viewpoint = viewpoint.horizontalPivotAround(pivotPoint, rightRotate);
 
         // Vertical pivot.

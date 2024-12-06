@@ -35,14 +35,6 @@ public class main {
         Renderer renderer = new Renderer(scene);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
         cameraOperator.run();
-        // scene.updateBrightness();
-        // renderer.update();
-        // for (int i = 0; i < 50; i++) {
-        //     scene.cameraStrafe(0, 0, 0);
-        //     scene.cameraPivotAroundPoint(new Vector(2, 0, 0), Math.PI/40, 0);
-        //     scene.updateBrightness();
-        //     renderer.update();
-        // }
     }
 
     private static void renderScene2() {

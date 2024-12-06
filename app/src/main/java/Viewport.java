@@ -1,19 +1,19 @@
 public class Viewport {
-    final Vector corner1;
-    final Vector corner2;
+    final Vector bottomLeftCorner;
+    final Vector topLeftCorner;
     final Vector verticalDirection;
-    final Vector corner3;
+    final Vector bottomRightCorner;
     final Vector horizontalDirection;
     final int screenWidth;
     final int screenHeight;
     private Pixel[][] pixels;
 
-    public Viewport(Vector corner1, Vector corner2, Vector corner3, int screenWidth, int screenHeight) {
-        this.corner1 = corner1;
-        this.corner2 = corner2;
-        this.verticalDirection = corner2.subtract(corner1);
-        this.corner3 = corner3;
-        this.horizontalDirection = corner3.subtract(corner1);
+    public Viewport(Vector bottomLeftCorner, Vector topLeftCorner, Vector bottomRightCorner, int screenWidth, int screenHeight) {
+        this.bottomLeftCorner = bottomLeftCorner;
+        this.topLeftCorner = topLeftCorner;
+        this.verticalDirection = topLeftCorner.subtract(bottomLeftCorner);
+        this.bottomRightCorner = bottomRightCorner;
+        this.horizontalDirection = bottomRightCorner.subtract(bottomLeftCorner);
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         generatePixels(screenWidth, screenHeight);
@@ -33,7 +33,7 @@ public class Viewport {
         Vector verticalStep = verticalDirection.scalarMultiple(verticalScalar);
         double horizontalScalar = (double)pixel.xCoord/(double)screenWidth;
         Vector horizontalStep = horizontalDirection.scalarMultiple(horizontalScalar);
-        return corner1.add(horizontalStep).add(verticalStep);
+        return bottomLeftCorner.add(horizontalStep).add(verticalStep);
     }
 
     public Pixel getPixel(int x, int y) {
