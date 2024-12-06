@@ -1,7 +1,7 @@
 
 public class main {
     public static void main(String[] args) {
-        renderScene1();
+        renderScene6();
     }
 
     private static void renderScene1() {
@@ -127,9 +127,15 @@ public class main {
 
         Renderer renderer = new Renderer(scene);
         renderer.update();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 10; i++) {
             scene.cameraStrafe(0, 0, 0);
             scene.cameraRotate(Math.PI/40, 0);
+            scene.updateBrightness();
+            renderer.update();
+        }
+        for (int i = 0; i < 10; i++) {
+            scene.cameraStrafe(0, 0, 0);
+            scene.cameraRotate(-Math.PI/40, 0);
             scene.updateBrightness();
             renderer.update();
         }
@@ -172,12 +178,61 @@ public class main {
 
         Renderer renderer = new Renderer(scene);
         renderer.update();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             scene.cameraStrafe(0, 0, 0);
             scene.cameraRotate(0, Math.PI/40);
             scene.updateBrightness();
             renderer.update();
             System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
         }
+        for (int i = 0; i < 10; i++) {
+            scene.cameraStrafe(0, 0, 0);
+            scene.cameraRotate(0, -Math.PI/40);
+            scene.updateBrightness();
+            renderer.update();
+            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
+        }
     }
+
+    private static void renderScene6() {
+        Vector corner1 = new Vector(10, -1, -1);
+        Vector corner2 = new Vector(10, 1, -1);
+        Vector corner3 = new Vector(10, -1, 1);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 1000, 1000);
+        Vector viewpoint = new Vector(15, 0, 0);
+
+        Sphere sphere1 = new Sphere(0,0,0, 1, 0.5);
+        Sphere sphere2 = new Sphere(3,-1,0,0.3, 0.5);
+        Sphere sphere3 = new Sphere(-3, 1, 0, 1, 0.5);
+
+        Lightsource lightsource1 = new Lightsource(-5, -1, 0, 100,0,0);
+        Lightsource lightsource2 = new Lightsource(0, 5, 0, 0, 100, 0);
+        Lightsource lightsource3 = new Lightsource(5, -1, 0, 0, 0, 100);
+
+        Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
+        scene.addShape(sphere2);
+        scene.addShape(sphere3);
+
+        scene.addLightsource(lightsource2);
+        scene.addLightsource(lightsource3);
+
+        scene.updateBrightness();
+
+        Renderer renderer = new Renderer(scene);
+        renderer.update();
+        for (int i = 0; i < 5; i++) {
+            scene.cameraPivotAroundPoint(new Vector(0, 0, 0), 0, Math.PI/40);
+            scene.updateBrightness();
+            renderer.update();
+            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
+        }
+        for (int i = 0; i < 10; i++) {
+            scene.cameraPivotAroundPoint(new Vector(0, 0, 0), 0, -Math.PI/40);
+            scene.updateBrightness();
+            renderer.update();
+            System.out.println(scene.viewport.corner1.distance(scene.viewpoint));
+        }
+    }
+
+
 }

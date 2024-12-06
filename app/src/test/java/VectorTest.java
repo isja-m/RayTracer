@@ -17,6 +17,13 @@ public class VectorTest {
     }
 
     @Test
+    public void calculateCorrectCrossProduct() {
+        Vector vector1 = new Vector(3, -3, 1);
+        Vector vector2 = new Vector(4, 9, 2);
+        assertTrue(vector1.crossProduct(vector2).equals(new Vector(-15, -2, 39)));
+    }
+
+    @Test
     public void calculateAdditionCorrectly() {
         Vector vector1 = new Vector(3, 2, 2);
         Vector vector2 = new Vector(1, 1, 4);
@@ -65,13 +72,37 @@ public class VectorTest {
     @Test
     public void verticalRotateIsCorrect() {
         Vector vector1 = new Vector(1, 1, 0);
-        assertTrue(vector1.verticalRotate(Math.PI/4).equals(new Vector(Math.sqrt(2), 0, 0)));
+        Vector rotationAxis = new Vector(0,0,1);
+        assertTrue(vector1.verticalRotate(rotationAxis, Math.PI/4).equals(new Vector(Math.sqrt(2), 0, 0)));
     }
 
     @Test
     public void verticalPivotAroundIsCorrect() {
         Vector vector1 = new Vector(1, 1, 0);
         Vector origin = new Vector(0, 0, 0);
-        assertTrue(origin.verticalPivotAround(vector1, Math.PI/4).equals(new Vector(1-Math.sqrt(2), 1, 0)));
+        Vector rotationAxis = new Vector(0,0,1);
+        assertTrue(origin.verticalPivotAround(vector1, rotationAxis, Math.PI/4).equals(new Vector(1-Math.sqrt(2), 1, 0)));
+    }
+
+    @Test
+    public void verticalRotateWithNonperpendicularRotationAxisIsCorrect() {
+        Vector vector1 = new Vector(1, 1, 1);
+        Vector rotationAxis = new Vector(0,0,1);
+        assertTrue(vector1.verticalRotate(rotationAxis, Math.PI/4).equals(new Vector(Math.sqrt(2), 0, 1)));
+    }
+
+    @Test
+    public void verticalPivotAroundWithNonperpendicularRotationAxisIsCorrect() {
+        Vector vector1 = new Vector(1, 1, 1);
+        Vector origin = new Vector(0, 0, 0);
+        Vector rotationAxis = new Vector(0,0,1);
+        assertTrue(origin.verticalPivotAround(vector1, rotationAxis, Math.PI/4).equals(new Vector(1-Math.sqrt(2), 1, 0)));
+    }
+
+    @Test
+    public void projectionToPlaneIsCorrect() {
+        Vector vector1 = new Vector(1, 1, 0);
+        Vector perpendicularToPlane = new Vector(1,0,0);
+        assertTrue(vector1.projectionToPlane(perpendicularToPlane).equals(new Vector(0, 1, 0)));
     }
 }

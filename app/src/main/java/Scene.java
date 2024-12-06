@@ -41,9 +41,14 @@ public class Scene {
         Vector newCorner1 = viewport.corner1.horizontalPivotAround(viewpoint, rightRotate);
         Vector newCorner2 = viewport.corner2.horizontalPivotAround(viewpoint, rightRotate);
         Vector newCorner3 = viewport.corner3.horizontalPivotAround(viewpoint, rightRotate);
-        newCorner1 = newCorner1.verticalPivotAround(viewpoint, -upRotate);
-        newCorner2 = newCorner2.verticalPivotAround(viewpoint, -upRotate);
-        newCorner3 = newCorner3.verticalPivotAround(viewpoint, -upRotate);
+        Vector middleOfScreen = newCorner2.add(newCorner3).scalarMultiple(0.5);
+        // Vector verticalRotationAxis = new Vector(viewpoint.xCoord-middleOfScreen.xCoord, 0, viewpoint.zCoord-middleOfScreen.zCoord);
+        // verticalRotationAxis = verticalRotationAxis.horizontalRotate(Math.PI/2);
+        // verticalRotationAxis = verticalRotationAxis.scalarMultiple(1/verticalRotationAxis.norm());
+        Vector verticalRotationAxis = viewport.horizontalDirection.normalize();
+        newCorner1 = newCorner1.verticalPivotAround(viewpoint, verticalRotationAxis, upRotate);
+        newCorner2 = newCorner2.verticalPivotAround(viewpoint, verticalRotationAxis, upRotate);
+        newCorner3 = newCorner3.verticalPivotAround(viewpoint, verticalRotationAxis, upRotate);
         viewport = new Viewport(newCorner1, newCorner2, newCorner3, getScreenWidth(), getScreenHeight());
     }
 
@@ -52,10 +57,13 @@ public class Scene {
         Vector newCorner2 = viewport.corner2.horizontalPivotAround(pivotPoint, rightRotate);
         Vector newCorner3 = viewport.corner3.horizontalPivotAround(pivotPoint, rightRotate);
         viewpoint = viewpoint.horizontalPivotAround(pivotPoint, rightRotate);
-        newCorner1 = newCorner1.verticalPivotAround(pivotPoint, -upRotate);
-        newCorner2 = newCorner2.verticalPivotAround(pivotPoint, -upRotate);
-        newCorner3 = newCorner3.verticalPivotAround(pivotPoint, -upRotate);
-        viewpoint = viewpoint.verticalPivotAround(pivotPoint, -upRotate);
+        Vector verticalRotationAxis = new Vector(pivotPoint.xCoord-viewpoint.xCoord, 0, pivotPoint.zCoord-viewpoint.zCoord);
+        verticalRotationAxis = verticalRotationAxis.horizontalRotate(Math.PI/2);
+        verticalRotationAxis = verticalRotationAxis.normalize();
+        newCorner1 = newCorner1.verticalPivotAround(pivotPoint, verticalRotationAxis, -upRotate);
+        newCorner2 = newCorner2.verticalPivotAround(pivotPoint, verticalRotationAxis, -upRotate);
+        newCorner3 = newCorner3.verticalPivotAround(pivotPoint, verticalRotationAxis, -upRotate);
+        viewpoint = viewpoint.verticalPivotAround(pivotPoint, verticalRotationAxis, -upRotate);
         viewport = new Viewport(newCorner1, newCorner2, newCorner3, getScreenWidth(), getScreenHeight());
     }
 
