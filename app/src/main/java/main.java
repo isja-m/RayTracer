@@ -1,7 +1,7 @@
 
 public class main {
     public static void main(String[] args) {
-        renderScene1();
+        renderScene2();
     }
 
     private static void renderScene1() {
@@ -39,10 +39,10 @@ public class main {
 
     private static void renderScene2() {
         Vector corner1 = new Vector( -400.0, -300.0, 50.0);
-        Vector corner2 = new Vector(400.0, -300.0, 50.0);
-        Vector corner3 = new Vector( -400.0, 300.0, 50.0);
+        Vector corner2 = new Vector(-400.0, 300.0, 50.0);
+        Vector corner3 = new Vector( 400.0, -300.0, 50.0);
         Vector viewpoint = new Vector(0, 0, 1000.0);
-        Viewport viewport = new Viewport(corner1, corner2, corner3, 600, 800);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 800, 600);
 
         Sphere sphere1 = new Sphere(new Vector(0.0, 0.0, 100.0), 200.0, 0.5);
         Sphere sphere2 = new Sphere(new Vector(100.0, 150.0, 130.0), 50, 0.5);
@@ -53,10 +53,9 @@ public class main {
         scene.addShape(sphere2);
         scene.addLightsource(lightsource2);
 
-        scene.updateBrightness();
-
         Renderer renderer = new Renderer(scene);
-        renderer.update();
+        CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/16, 20);
+        cameraOperator.run();
     }
 
     private static void renderScene3() {
@@ -99,9 +98,9 @@ public class main {
         Sphere sphere7 = new Sphere(-4, 0, -4, 1, 0.5);
         Sphere sphere8 = new Sphere(4, 0, -4, 1, 0.5);
 
-        Lightsource lightsource1 = new Lightsource(-1, 0, 0, 100,0,0);
-        Lightsource lightsource2 = new Lightsource(0, 0, 1, 0, 100, 0);
-        Lightsource lightsource3 = new Lightsource(-1, 0, 0, 0, 0, 100);
+        Lightsource lightsource1 = new Lightsource(-1, 1, 0, 100,0,0);
+        Lightsource lightsource2 = new Lightsource(0, 1, 1, 0, 100, 0);
+        Lightsource lightsource3 = new Lightsource(1, 1, 0, 0, 0, 100);
 
         Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
         scene.addShape(sphere2);
@@ -119,7 +118,7 @@ public class main {
 
         Renderer renderer = new Renderer(scene);
         renderer.update();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             scene.cameraStrafe(0, 0, 0);
             scene.cameraRotate(Math.PI/40, 0);
             scene.updateBrightness();
