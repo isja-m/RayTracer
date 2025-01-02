@@ -60,6 +60,8 @@ public class Vector {
     Vector perpendicularVector(Shape shape) {
         if (shape instanceof Sphere) {
             return perpendicularVector((Sphere) shape);
+        } else if (shape instanceof Triangle) {
+            return ((Triangle) shape).getNormalVector();
         }
         return null;
     }
@@ -97,5 +99,10 @@ public class Vector {
         Vector term2 = rotationAxis.crossProduct(this).scalarMultiple(Math.sin(-angle));
         Vector term3 = rotationAxis.scalarMultiple(rotationAxis.dotProduct(this) * (1 - Math.cos(-angle)));
         return term1.add(term2).add(term3);
+    }
+
+    double determinant(Vector vector2, Vector vector3) {
+        // Computes the determinant of the 3x3 matrix with this vector as first collumn and vector2 and vector3 as second and third columns respectively.
+        return dotProduct(vector2.crossProduct(vector3));
     }
 }

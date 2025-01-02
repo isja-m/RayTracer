@@ -1,7 +1,7 @@
 
 public class main {
     public static void main(String[] args) {
-        renderScene2();
+        polygonTest1();
     }
 
     private static void renderScene1() {
@@ -219,6 +219,49 @@ public class main {
             scene.updateBrightness();
             renderer.update();
         }
+    }
+
+    private static void polygonTest1() {
+        Vector corner1 = new Vector(-2, -1, -1);
+        Vector corner2 = new Vector(-2, 1, -1);
+        Vector corner3 = new Vector(-2, -1, 1);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 1000, 1000);
+        Vector viewpoint = new Vector(-3, 0, 0);
+
+        Vector vector1 = new Vector(0, 0, 0);
+        Vector vector2 = new Vector(0, 1, 0);
+        Vector vector3 = new Vector(0, 0, 1);
+        Vector vector4 = new Vector(1, 1, 1);
+
+        Triangle triangle1 = new Triangle(vector1, vector2, vector3, 0.5);
+        Triangle triangle2 = new Triangle(vector4, vector2, vector3, 0.5);
+        Triangle triangle3 = new Triangle(vector1, vector4, vector3, 0.5);
+        Triangle triangle4 = new Triangle(vector1, vector2, vector4, 0.5);
+
+        Sphere sphere1 = new Sphere(vector1, 0.2, 0.5);
+        Sphere sphere2 = new Sphere(vector2, 0.2, 0.5);
+        Sphere sphere3 = new Sphere(vector3, 0.2, 0.5);
+        Sphere sphere4 = new Sphere(vector4, 0.2, 0.5);
+
+        Lightsource lightsource1 = new Lightsource(-2, 0, 4, 100,0,0);
+        Lightsource lightsource2 = new Lightsource(-2, -2, -2, 0, 100, 0);
+        Lightsource lightsource3 = new Lightsource(-2, 2, -2, 0, 0, 100);
+
+        Scene scene = new Scene(lightsource1, triangle1, viewpoint, viewport);
+        // scene.addShape(triangle2);
+        // scene.addShape(triangle3);
+        // scene.addShape(triangle4);
+        scene.addShape(sphere1);
+        scene.addShape(sphere2);
+        scene.addShape(sphere3);
+        scene.addShape(sphere4);
+
+        scene.addLightsource(lightsource2);
+        scene.addLightsource(lightsource3);
+
+        Renderer renderer = new Renderer(scene);
+        CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
+        cameraOperator.run();
     }
 
 

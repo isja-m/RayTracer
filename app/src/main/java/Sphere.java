@@ -10,9 +10,7 @@ public class Sphere implements Shape {
     }
 
     public Sphere(Vector centre, double radius, double diffuseCoefficient) {
-        this.centre = centre;
-        this.radius = radius;
-        this.diffuseCoefficient = (float)diffuseCoefficient;
+        this(centre, radius, (float)diffuseCoefficient);
     }
 
     public Sphere(double x, double y, double z, double radius, double diffuseCoefficient) {

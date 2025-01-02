@@ -30,7 +30,7 @@ public class Renderer {
         frame.repaint();
         frame.setVisible(true);
         try { // Wait to avoid graphical glitches.
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(1000);
         } catch (Exception e) {
         }
     }

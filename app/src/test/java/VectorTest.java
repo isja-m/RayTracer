@@ -105,4 +105,12 @@ public class VectorTest {
         Vector perpendicularToPlane = new Vector(1,0,0);
         assertTrue(vector1.projectionToPlane(perpendicularToPlane).equals(new Vector(0, 1, 0)));
     }
+
+    @Test
+    public void determinantIsCorrect() {
+        Vector vector1 = new Vector(2, 2, 1);
+        Vector vector2 = new Vector(-3, 0, 4);
+        Vector vector3 = new Vector(1, -1, 5);
+        assertEquals(49, vector1.determinant(vector2, vector3));
+    }
 }
