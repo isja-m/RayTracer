@@ -57,16 +57,16 @@ public class Vector {
         return this.subtract(vector2).norm();
     }
 
-    Vector perpendicularVector(Shape shape) {
+    Vector normalVectorAtShape(Shape shape, Line rayFromViewToShape) {
         if (shape instanceof Sphere) {
-            return perpendicularVector((Sphere) shape);
+            return normalVectorAtShape((Sphere) shape);
         } else if (shape instanceof Triangle) {
-            return ((Triangle) shape).getNormalVector();
+            return ((Triangle) shape).getNormalVector(rayFromViewToShape);
         }
         return null;
     }
 
-    Vector perpendicularVector(Sphere sphere) {
+    Vector normalVectorAtShape(Sphere sphere) {
         Line perpendicularLine = new Line(sphere.centre, this);
         return perpendicularLine.getParametricLine().direction;
     }

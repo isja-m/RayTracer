@@ -37,10 +37,10 @@ public class VectorTest {
     }
 
     @Test
-    public void perpendicularVectorIsCorrect() {
+    public void normalVectorIsCorrect() {
         Sphere sphere = new Sphere(new Vector(0, 0, 0), 2, 0.5);
         Vector vector1 = new Vector(0,2,0);
-        assertTrue(vector1.perpendicularVector(sphere).equals(new Vector(0, 1, 0)));
+        assertTrue(vector1.normalVectorAtShape(sphere).equals(new Vector(0, 1, 0)));
     }
 
     @Test

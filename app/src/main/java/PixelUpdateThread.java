@@ -69,19 +69,22 @@ class PixelUpdateThread implements Runnable {
             Vector[] intersectionsWithShape = shape.intersect(rayFromShapeToLightSource);
 
             Boolean canSeeLight = true;
-            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersectionsWithShape, distanceFromPointToLight, canSeeLight);
-            canSeeLight = otherShapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, distanceFromPointToLight, canSeeLight);
+            canSeeLight = shapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, intersectionsWithShape, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);
+            canSeeLight = otherShapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);
 
             if (canSeeLight) {
-                addBrightness(x, y, shape, pointOnShape, scene.getLightsource(i).brightnesses, rayFromShapeToLightSource);
+                addBrightness(x, y, shape, pointOnShape, scene.getLightsource(i).brightnesses, rayFromShapeToLightSource, rayFromViewToShape);
             }
         }
     }
 
-    private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Vector[] intersectionsWithShape, double distanceFromPointToLight,
-            Boolean canSeeLight) {
+    private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, Vector[] intersectionsWithShape, double distanceFromPointToLight,
+            Boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) { // Requires different implementation for triangles.
         for (Vector intersection : intersectionsWithShape) {
             if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
+                canSeeLight = false;
+            }
+            if (intersection.distance(pointOnShape) < 1e-13 && rayFromShapeToLightSource.getParametricLine().direction.dotProduct(pointOnShape.normalVectorAtShape(shape, rayFromViewToShape)) < 0) {
                 canSeeLight = false;
             }
         }
@@ -89,18 +92,21 @@ class PixelUpdateThread implements Runnable {
     }
 
     private Boolean otherShapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, double distanceFromPointToLight,
-            Boolean canSeeLight) {
+            Boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) {
         for (Shape otherShape : scene.getShapes()) {
             Vector[] intersections = otherShape.intersect(rayFromShapeToLightSource);
-            canSeeLight = shapeIsNotBlockingLight(locationOfLight, intersections, distanceFromPointToLight, canSeeLight);
+            canSeeLight = shapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, intersections, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);
         }
         return canSeeLight;
     }
 
-    private void addBrightness(int x, int y, Shape shape, Vector pointOnShape, Vector brightnesses, Line rayFromShapeToLightSource) {
+    private void addBrightness(int x, int y, Shape shape, Vector pointOnShape, Vector brightnesses, Line rayFromShapeToLightSource, Line rayFromViewToShape) {
         float diffusalFactor = shape.getDiffuseCoefficient();
-        diffusalFactor *= pointOnShape.perpendicularVector(shape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
+        float dotProductWithLight = (float)pointOnShape.normalVectorAtShape(shape, rayFromViewToShape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
+        diffusalFactor *= dotProductWithLight;
         diffusalFactor = Math.max(0, diffusalFactor);
-        scene.getPixel(x, y).addToBrightness(brightnesses.scalarMultiple(diffusalFactor));
+        if (dotProductWithLight > 0) {
+            scene.getPixel(x, y).addToBrightness(brightnesses.scalarMultiple(diffusalFactor));
+        }
 }
 }

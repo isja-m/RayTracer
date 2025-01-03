@@ -32,6 +32,9 @@ public class Triangle implements Shape {
         /* Finds intersection using the Möller–Trumbore intersection algorithm:
          * https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
         */
+        if (isParallel(line)) {
+            return new Vector[] {new Vector(Math.sqrt(-1),Math.sqrt(-1),Math.sqrt(-1))};
+        }
         Vector column1 = line.direction.scalarMultiple(-1);
         Vector column2 = corner2.subtract(corner1);
         Vector column3 = corner3.subtract(corner1);
@@ -53,6 +56,14 @@ public class Triangle implements Shape {
 
     public Vector getNormalVector() {
         return corner1.subtract(corner2).crossProduct(corner1.subtract(corner3)).normalize();
+    }
+
+    public Vector getNormalVector(Line rayFromViewToShape) {
+        Vector normal = getNormalVector();
+        if (normal.dotProduct(rayFromViewToShape.getParametricLine().direction) < 0) {
+            return normal;
+        }
+        return normal.scalarMultiple(-1);
     }
 
     public Vector nearestIntersect(Line line) {

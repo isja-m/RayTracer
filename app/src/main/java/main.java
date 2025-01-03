@@ -247,11 +247,11 @@ public class main {
         Lightsource lightsource2 = new Lightsource(-2, -2, -2, 0, 100, 0);
         Lightsource lightsource3 = new Lightsource(-2, 2, -2, 0, 0, 100);
 
-        Scene scene = new Scene(lightsource1, triangle1, viewpoint, viewport);
-        // scene.addShape(triangle2);
-        // scene.addShape(triangle3);
-        // scene.addShape(triangle4);
-        scene.addShape(sphere1);
+        Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
+        scene.addShape(triangle1);
+        scene.addShape(triangle2);
+        scene.addShape(triangle3);
+        scene.addShape(triangle4);
         scene.addShape(sphere2);
         scene.addShape(sphere3);
         scene.addShape(sphere4);
