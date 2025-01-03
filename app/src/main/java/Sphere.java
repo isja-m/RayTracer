@@ -40,4 +40,10 @@ public class Sphere implements Shape {
     public float getDiffuseCoefficient() {
         return diffuseCoefficient;
     }
+
+    public Vector getNormalVector(ParametricLine rayFromViewToShape) {
+        Vector pointOnShape = nearestIntersect(rayFromViewToShape);
+        Line perpendicularLine = new Line(centre, pointOnShape);
+        return perpendicularLine.getParametricLine().direction;
+    }
 }

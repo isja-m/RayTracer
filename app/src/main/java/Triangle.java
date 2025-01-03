@@ -58,9 +58,9 @@ public class Triangle implements Shape {
         return corner1.subtract(corner2).crossProduct(corner1.subtract(corner3)).normalize();
     }
 
-    public Vector getNormalVector(Line rayFromViewToShape) {
+    public Vector getNormalVector(ParametricLine rayFromViewToShape) {
         Vector normal = getNormalVector();
-        if (normal.dotProduct(rayFromViewToShape.getParametricLine().direction) < 0) {
+        if (normal.dotProduct(rayFromViewToShape.direction) < 0) {
             return normal;
         }
         return normal.scalarMultiple(-1);

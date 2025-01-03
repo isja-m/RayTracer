@@ -84,7 +84,7 @@ class PixelUpdateThread implements Runnable {
             if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
                 canSeeLight = false;
             }
-            if (intersection.distance(pointOnShape) < 1e-13 && rayFromShapeToLightSource.getParametricLine().direction.dotProduct(pointOnShape.normalVectorAtShape(shape, rayFromViewToShape)) < 0) {
+            if (intersection.distance(pointOnShape) < 1e-13 && rayFromShapeToLightSource.getParametricLine().direction.dotProduct(shape.getNormalVector(rayFromViewToShape.getParametricLine())) < 0) {
                 canSeeLight = false;
             }
         }
@@ -102,11 +102,13 @@ class PixelUpdateThread implements Runnable {
 
     private void addBrightness(int x, int y, Shape shape, Vector pointOnShape, Vector brightnesses, Line rayFromShapeToLightSource, Line rayFromViewToShape) {
         float diffusalFactor = shape.getDiffuseCoefficient();
-        float dotProductWithLight = (float)pointOnShape.normalVectorAtShape(shape, rayFromViewToShape).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
+        float dotProductWithLight = (float)shape.getNormalVector(rayFromViewToShape.getParametricLine()).dotProduct(rayFromShapeToLightSource.getParametricLine().direction);
         diffusalFactor *= dotProductWithLight;
         diffusalFactor = Math.max(0, diffusalFactor);
         if (dotProductWithLight > 0) {
             scene.getPixel(x, y).addToBrightness(brightnesses.scalarMultiple(diffusalFactor));
         }
-}
+    }
+
+    
 }

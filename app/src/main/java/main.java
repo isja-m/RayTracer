@@ -2,7 +2,9 @@
  * Improve code coverage
  * Polyhedra
  * Refactoring
+ *  - public/private/package-private
  * Update readme
+ * Shape stretching
  */
 
 public class main {

@@ -57,22 +57,6 @@ public class Vector {
         return this.subtract(vector2).norm();
     }
 
-    Vector normalVectorAtShape(Shape shape, Line rayFromViewToShape) {
-        if (shape instanceof Sphere) {
-            return normalVectorAtShape((Sphere) shape);
-        } else if (shape instanceof Triangle) {
-            return ((Triangle) shape).getNormalVector(rayFromViewToShape);
-        } else if (shape instanceof Polygon) {
-            return ((Polygon) shape).getNormalVector(rayFromViewToShape);
-        }
-        return null;
-    }
-
-    Vector normalVectorAtShape(Sphere sphere) {
-        Line perpendicularLine = new Line(sphere.centre, this);
-        return perpendicularLine.getParametricLine().direction;
-    }
-
     Vector projectionToPlane(Vector perpendicularToPlane) {
         double scalar = this.dotProduct(perpendicularToPlane)/perpendicularToPlane.squaredNorm();
         return this.subtract(perpendicularToPlane.scalarMultiple(scalar));

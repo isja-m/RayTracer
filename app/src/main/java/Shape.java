@@ -4,4 +4,6 @@ public interface Shape {
     Vector nearestIntersect(Line line);
 
     float getDiffuseCoefficient();
+
+    Vector getNormalVector(ParametricLine rayFromViewToShape);
 }

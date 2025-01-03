@@ -39,8 +39,10 @@ public class VectorTest {
     @Test
     public void normalVectorIsCorrect() {
         Sphere sphere = new Sphere(new Vector(0, 0, 0), 2, 0.5);
-        Vector vector1 = new Vector(0,2,0);
-        assertTrue(vector1.normalVectorAtShape(sphere).equals(new Vector(0, 1, 0)));
+        Vector direction = new Vector(0,-1,0);
+        Vector start = new Vector(0,4,0);
+        ParametricLine rayFromViewToShape = new ParametricLine(start, direction);
+        assertTrue(sphere.getNormalVector(rayFromViewToShape).equals(new Vector(0, 1, 0)));
     }
 
     @Test

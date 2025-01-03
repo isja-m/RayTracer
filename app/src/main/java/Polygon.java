@@ -1,5 +1,5 @@
 public class Polygon implements Shape {
-    final Vector[] corners;
+    private Vector[] corners;
     private Triangle[] triangles;
     final float diffuseCoefficient;
 
@@ -69,7 +69,7 @@ public class Polygon implements Shape {
         return triangles[0].getNormalVector();
     }
 
-    public Vector getNormalVector(Line rayFromViewToShape) {
+    public Vector getNormalVector(ParametricLine rayFromViewToShape) {
         return triangles[0].getNormalVector(rayFromViewToShape);
     }
 
