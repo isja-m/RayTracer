@@ -1,15 +1,21 @@
 /* TODO:
  * Improve code coverage
  * Polyhedra
+ *  - Cube
+ *  - Diamonds (Octahedron, etc.)
+ *  - Dodecahedron
+ *  - Icosahedron
  * Refactoring
  *  - public/private/package-private
  * Update readme
  * Shape stretching
+ * Light gets dimmer at longer distances
+ * Better filemanagement
  */
 
 public class main {
     public static void main(String[] args) throws InvalidGeometryException {
-        polygonsManual1();
+        polyhedraManual1();
     }
 
     private static void spheresManual1() {
@@ -301,6 +307,59 @@ public class main {
         scene.addShape(polygon2);
         scene.addShape(polygon3);
         scene.addShape(sphere1);
+
+        scene.addLightsource(lightsource2);
+        scene.addLightsource(lightsource3);
+
+        Renderer renderer = new Renderer(scene);
+        CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
+        cameraOperator.run();
+    }
+
+    private static void polyhedraManual1() throws InvalidGeometryException {
+        Vector corner1 = new Vector(-2, -1, -1);
+        Vector corner2 = new Vector(-2, 1, -1);
+        Vector corner3 = new Vector(-2, -1, 1);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 1000, 1000);
+        Vector viewpoint = new Vector(-3, 0, 0);
+
+        Vector topVector1 = new Vector(0, 2, -3);
+        Vector topVector2 = new Vector(0, 2, 0);
+        Vector topVector3 = new Vector(0, 2, 3);
+        Vector baseCentre1 = new Vector(0, 0, -2);
+        Vector baseCentre2 = new Vector(0, 0, 0);
+        Vector baseCentre3 = new Vector(0, 0, 2);
+        Vector firstBaseCorner1 = new Vector(0, 0, 1);
+        Vector sphereCentre1 = new Vector(15, 0, 0);
+
+        Vector normalVector1 = new Vector(0, 1, 0);
+
+        Polygon base1 = new Polygon(0.5, baseCentre1, firstBaseCorner1.add(baseCentre1), normalVector1, 4);
+        Polygon base2 = new Polygon(0.5, baseCentre2, firstBaseCorner1.add(baseCentre2), normalVector1, 5);
+        Polygon base3 = new Polygon(0.5, baseCentre3, firstBaseCorner1.add(baseCentre3), normalVector1, 6);
+
+        Pyramid pyramid1 = new Pyramid(topVector1, base1, 0.5);
+        Pyramid pyramid2 = new Pyramid(topVector2, base2, 0.5);
+        Pyramid pyramid3 = new Pyramid(topVector3, base3, 0.5);
+
+        Vector firstCorner1 = new Vector(0, 1, 0);
+        Vector testNormalVector1 = new Vector(-1, 0, 0);
+        Vector vector1 = new Vector(0, 0, 0);
+        Polygon polygon1 = new Polygon(0.5, vector1, firstCorner1.add(vector1), testNormalVector1, 4);
+        Polyhedron testPolyhedron = new Polyhedron(new Polygon[] {polygon1}, 0.5);
+
+        Sphere sphere1 = new Sphere(sphereCentre1, 10, 0.5);
+
+        Lightsource lightsource1 = new Lightsource(-2, 0, 4, 100,0,0);
+        Lightsource lightsource2 = new Lightsource(-2, -2, -2, 0, 100, 0);
+        Lightsource lightsource3 = new Lightsource(-2, 2, -2, 0, 0, 100);
+
+        Scene scene = new Scene(lightsource1, sphere1, viewpoint, viewport);
+        scene.addShape(pyramid1);
+        scene.addShape(pyramid2);
+        scene.addShape(pyramid3);
+        // scene.addShape(testPolyhedron);
+        // scene.addShape(polygon1);
 
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);

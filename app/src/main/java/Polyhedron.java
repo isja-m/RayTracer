@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Polyhedron implements Shape {
-    private Polygon[] faces;
-    private float diffuseCoefficient;
+    protected Polygon[] faces;
+    protected float diffuseCoefficient;
 
     public Polyhedron(Polygon[] faces, float diffuseCoefficient) {
         this.faces = faces;
@@ -22,13 +22,13 @@ public class Polyhedron implements Shape {
         for (Polygon face : faces) {
             Vector intersection = face.intersect(line)[0];
             if (!Double.isNaN(intersection.xCoord)){
-                intersection.add(intersection);
+                intersections.add(intersection);
             }
         }
         if (intersections.size() == 0) {
             return new Vector[] {new Vector(Math.sqrt(-1),Math.sqrt(-1),Math.sqrt(-1))};
         }
-        return (Vector[])intersections.toArray();
+        return intersections.toArray(new Vector[0]);
     }
 
     public Vector nearestIntersect(Line line) {
@@ -36,9 +36,11 @@ public class Polyhedron implements Shape {
     }
 
     public Vector nearestIntersect(ParametricLine line) {
-        Vector nearestIntersection = null;
+        Vector nearestIntersection = new Vector(Math.sqrt(-1),Math.sqrt(-1),Math.sqrt(-1));
         for (Vector intersection : intersect(line)) {
-            if (intersection.distance(line.start) < nearestIntersection.distance(line.start)) {
+            if (Double.isNaN(nearestIntersection.xCoord)) {
+                nearestIntersection = intersection;
+            } else if (intersection.distance(line.start) < nearestIntersection.distance(line.start)) {
                 nearestIntersection = intersection;
             }
         }

@@ -8,7 +8,9 @@ public class Polygon implements Shape {
         this.diffuseCoefficient = diffuseCoefficient;
         this.triangles = new Triangle[corners.length-2];
         generateTriangles();
-        if (!cornersLieOnPlane()) {
+        if (corners.length < 3) {
+            throw(new InvalidGeometryException("Not enough corners provided."));
+        } else if (!cornersLieOnPlane()) {
             throw(new InvalidGeometryException("The given corners do not lie on a 2D plane."));
         }
     }
@@ -83,5 +85,9 @@ public class Polygon implements Shape {
 
     public float getDiffuseCoefficient() {
         return diffuseCoefficient;
+    }
+
+    public Vector[] getCorners() {
+        return corners;
     }
 }

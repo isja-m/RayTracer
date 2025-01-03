@@ -46,16 +46,18 @@ class PixelUpdateThread implements Runnable {
         for (Shape shape : scene.getShapes()) {
             Line rayFromViewToShape = new Line(scene.getViewpoint(), viewportVector);
             Vector pointOnShape = shape.nearestIntersect(rayFromViewToShape);
-            rayHitsSomeShape = rayHitsSomeShape || !Double.isNaN(pointOnShape.xCoord);
-            if (scene.getViewpoint().distance(pointOnShape) < distanceToClosestShape) {
-                closestShape = shape;
-                distanceToClosestShape = scene.getViewpoint().distance(pointOnShape);
-                finalRayFromViewToShape = rayFromViewToShape;
-                finalPointOnShape = pointOnShape;
+            if (!(pointOnShape == null)) {
+                rayHitsSomeShape = rayHitsSomeShape || !Double.isNaN(pointOnShape.xCoord);
+                if (scene.getViewpoint().distance(pointOnShape) < distanceToClosestShape) {
+                    closestShape = shape;
+                    distanceToClosestShape = scene.getViewpoint().distance(pointOnShape);
+                    finalRayFromViewToShape = rayFromViewToShape;
+                    finalPointOnShape = pointOnShape;
+                }
             }
         }
 
-        if (rayHitsSomeShape) {
+        if (rayHitsSomeShape && !(finalPointOnShape == null)) {
             updateBrightnessAtPixelForShape(x, y, closestShape, viewportVector, finalRayFromViewToShape, finalPointOnShape);
         }
     }
