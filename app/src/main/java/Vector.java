@@ -32,11 +32,11 @@ public class Vector {
         return new Vector(newXCoord, newYCoord, newZCoord);
     }
     
-    Boolean equals(Vector vector2) {
+    boolean equals(Vector vector2) {
         return equals(vector2, 1e-13);
     }
     
-    Boolean equals(Vector vector2, double errorMargin) {
+    boolean equals(Vector vector2, double errorMargin) {
         return Math.abs(this.xCoord - vector2.xCoord) < errorMargin && Math.abs(this.yCoord - vector2.yCoord) < errorMargin 
             && Math.abs(this.zCoord - vector2.zCoord) < errorMargin;
     }
@@ -62,6 +62,8 @@ public class Vector {
             return normalVectorAtShape((Sphere) shape);
         } else if (shape instanceof Triangle) {
             return ((Triangle) shape).getNormalVector(rayFromViewToShape);
+        } else if (shape instanceof Polygon) {
+            return ((Polygon) shape).getNormalVector(rayFromViewToShape);
         }
         return null;
     }

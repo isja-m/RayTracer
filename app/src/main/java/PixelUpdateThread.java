@@ -34,7 +34,7 @@ class PixelUpdateThread implements Runnable {
 
     private void updateBrightnessAtPixel(int x, int y) {
         Vector viewportVector = scene.getVectorAtPixel(x, y);
-        Boolean rayHitsSomeShape = false;
+        boolean rayHitsSomeShape = false;
 
         Shape closestShape = scene.getShapes().get(0);
         double distanceToClosestShape = Double.POSITIVE_INFINITY;
@@ -68,7 +68,7 @@ class PixelUpdateThread implements Runnable {
             double distanceFromPointToLight = pointOnShape.distance(locationOfLight);
             Vector[] intersectionsWithShape = shape.intersect(rayFromShapeToLightSource);
 
-            Boolean canSeeLight = true;
+            boolean canSeeLight = true;
             canSeeLight = shapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, intersectionsWithShape, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);
             canSeeLight = otherShapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);
 
@@ -78,8 +78,8 @@ class PixelUpdateThread implements Runnable {
         }
     }
 
-    private Boolean shapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, Vector[] intersectionsWithShape, double distanceFromPointToLight,
-            Boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) { // Requires different implementation for triangles.
+    private boolean shapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, Vector[] intersectionsWithShape, double distanceFromPointToLight,
+            boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) { // Requires different implementation for triangles.
         for (Vector intersection : intersectionsWithShape) {
             if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
                 canSeeLight = false;
@@ -91,8 +91,8 @@ class PixelUpdateThread implements Runnable {
         return canSeeLight;
     }
 
-    private Boolean otherShapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, double distanceFromPointToLight,
-            Boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) {
+    private boolean otherShapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, double distanceFromPointToLight,
+            boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) {
         for (Shape otherShape : scene.getShapes()) {
             Vector[] intersections = otherShape.intersect(rayFromShapeToLightSource);
             canSeeLight = shapeIsNotBlockingLight(locationOfLight, rayFromShapeToLightSource, intersections, distanceFromPointToLight, canSeeLight, pointOnShape, shape, rayFromViewToShape);

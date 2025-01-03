@@ -1,10 +1,16 @@
+/* TODO:
+ * Improve code coverage
+ * Polyhedra
+ * Refactoring
+ * Update readme
+ */
 
 public class main {
-    public static void main(String[] args) {
-        polygonTest1();
+    public static void main(String[] args) throws InvalidGeometryException {
+        polygonsManual1();
     }
 
-    private static void renderScene1() {
+    private static void spheresManual1() {
         Vector corner1 = new Vector(-2, -1, -1);
         Vector corner2 = new Vector(-2, 1, -1);
         Vector corner3 = new Vector(-2, -1, 1);
@@ -37,7 +43,7 @@ public class main {
         cameraOperator.run();
     }
 
-    private static void renderScene2() {
+    private static void spheresManual2() {
         Vector corner1 = new Vector( -400.0, -300.0, 50.0);
         Vector corner2 = new Vector(-400.0, 300.0, 50.0);
         Vector corner3 = new Vector( 400.0, -300.0, 50.0);
@@ -58,7 +64,7 @@ public class main {
         cameraOperator.run();
     }
 
-    private static void renderScene3() {
+    private static void spheresStatic1() {
         Vector corner1 = new Vector(-4, -3, -3);
         Vector corner2 = new Vector(-4, 3, -3);
         Vector corner3 = new Vector(-4, -3, 3);
@@ -81,7 +87,7 @@ public class main {
         renderer.update();
     }
 
-    private static void renderScene4() {
+    private static void spheresAnimated1() {
         Vector corner1 = new Vector(2, -1, -1);
         Vector corner2 = new Vector(2, 1, -1);
         Vector corner3 = new Vector(2, -1, 1);
@@ -132,7 +138,7 @@ public class main {
         }
     }
 
-    private static void renderScene5() {
+    private static void spheresAnimated2() {
         Vector corner1 = new Vector(2, -1, -1);
         Vector corner2 = new Vector(2, 1, -1);
         Vector corner3 = new Vector(2, -1, 1);
@@ -183,7 +189,7 @@ public class main {
         }
     }
 
-    private static void renderScene6() {
+    private static void spheresAnimated3() {
         Vector corner1 = new Vector(10, -1, -1);
         Vector corner2 = new Vector(10, 1, -1);
         Vector corner3 = new Vector(10, -1, 1);
@@ -221,7 +227,7 @@ public class main {
         }
     }
 
-    private static void polygonTest1() {
+    private static void trianglesManual1() {
         Vector corner1 = new Vector(-2, -1, -1);
         Vector corner2 = new Vector(-2, 1, -1);
         Vector corner3 = new Vector(-2, -1, 1);
@@ -255,6 +261,44 @@ public class main {
         scene.addShape(sphere2);
         scene.addShape(sphere3);
         scene.addShape(sphere4);
+
+        scene.addLightsource(lightsource2);
+        scene.addLightsource(lightsource3);
+
+        Renderer renderer = new Renderer(scene);
+        CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
+        cameraOperator.run();
+    }
+
+    private static void polygonsManual1() throws InvalidGeometryException {
+        Vector corner1 = new Vector(-2, -1, -1);
+        Vector corner2 = new Vector(-2, 1, -1);
+        Vector corner3 = new Vector(-2, -1, 1);
+        Viewport viewport = new Viewport(corner1, corner2, corner3, 1000, 1000);
+        Vector viewpoint = new Vector(-3, 0, 0);
+
+        Vector vector1 = new Vector(0, 0, -2);
+        Vector vector2 = new Vector(0, 0, 0);
+        Vector vector3 = new Vector(0, 0, 2);
+        Vector vector4 = new Vector(15, 0, 0);
+        Vector firstCorner1 = new Vector(0, 1, 0);
+
+        Vector normalVector1 = new Vector(-1, 0, 0);
+
+        Polygon polygon1 = new Polygon(0.5, vector1, firstCorner1.add(vector1), normalVector1, 4);
+        Polygon polygon2 = new Polygon(0.5, vector2, firstCorner1.add(vector2), normalVector1, 5);
+        Polygon polygon3 = new Polygon(0.5, vector3, firstCorner1.add(vector3), normalVector1, 6);
+
+        Sphere sphere1 = new Sphere(vector4, 10, 0.5);
+
+        Lightsource lightsource1 = new Lightsource(-2, 0, 4, 100,0,0);
+        Lightsource lightsource2 = new Lightsource(-2, -2, -2, 0, 100, 0);
+        Lightsource lightsource3 = new Lightsource(-2, 2, -2, 0, 0, 100);
+
+        Scene scene = new Scene(lightsource1, polygon1, viewpoint, viewport);
+        scene.addShape(polygon2);
+        scene.addShape(polygon3);
+        scene.addShape(sphere1);
 
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);

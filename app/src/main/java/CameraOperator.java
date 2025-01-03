@@ -19,7 +19,7 @@ public class CameraOperator {
         scene.updateBrightness();
         renderer.update();
 
-        Boolean running = true;
+        boolean running = true;
         String input;
 
         System.out.println("Please enter 1 character at a time.");
