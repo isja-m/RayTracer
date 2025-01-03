@@ -1,3 +1,24 @@
+# Description
+
+This project is a basic implementation of a raytracer, writen in java. All geometric objects and functions are implemented from scratch, using only basic libraries from `java.util` and some graphical libraries from `java.awt` and `java.swing`.
+
+The code currently supports rendering of spheres, polygons and pyramids. General polyhedra can also be rendered, but must be declared one face at a time. The cameraview can be moved and rotaded via console interactions.
+
+# Planned features/improvements
+ * Improve code coverage
+ * More polyhedra
+   - Cube
+   - Diamonds (Octahedron, etc.)
+   - Dodecahedron
+   - Icosahedron
+ * Refactoring
+   - public/private/package-private
+ * Shape stretching
+ * Light dimming based on distance to shape
+ * Better filemanagement (i.e. not more subfolders)
+
+# How to Use
+
 To run the project, first build with
 ```console
 C:...\RayTracer> ./gradlew build
@@ -25,7 +46,7 @@ We read the coordinates as positive y being the 'up' direction and x and z being
      |
     -x
 ```
-Next create a Vector object as viewpoint, a Shape object (currently only spheres are implemented) and a Lightsource object.
+Next create a Vector object as viewpoint, a Shape object and a Lightsource object.
 Use the Viewport, Vector, Shape and Lightsource objects to create a Scene object.
 ```java
 Scene scene = new Scene(lightsource, shape, viewpoint, viewport);
