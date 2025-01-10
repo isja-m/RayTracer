@@ -46,7 +46,7 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
         cameraOperator.run();
     }
@@ -67,7 +67,7 @@ public class main {
         scene.addShape(sphere2);
         scene.addLightsource(lightsource2);
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/16, 20);
         cameraOperator.run();
     }
@@ -91,7 +91,7 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.updateBrightness();
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         renderer.update();
     }
 
@@ -130,7 +130,7 @@ public class main {
 
         scene.updateBrightness();
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         renderer.update();
         for (int i = 0; i < 100; i++) {
             scene.cameraStrafe(0, 0, 0);
@@ -181,7 +181,7 @@ public class main {
 
         scene.updateBrightness();
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         renderer.update();
         for (int i = 0; i < 5; i++) {
             scene.cameraStrafe(0, 0, 0);
@@ -221,7 +221,7 @@ public class main {
 
         scene.updateBrightness();
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         renderer.update();
         for (int i = 0; i < 5; i++) {
             scene.cameraPivotAroundPoint(new Vector(0, 0, 0), 0, Math.PI/40);
@@ -273,7 +273,7 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
         cameraOperator.run();
     }
@@ -311,7 +311,7 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
         cameraOperator.run();
     }
@@ -366,7 +366,7 @@ public class main {
         scene.addLightsource(lightsource2);
         scene.addLightsource(lightsource3);
 
-        Renderer renderer = new Renderer(scene);
+        Renderer renderer = new Renderer(scene, true);
         CameraOperator cameraOperator = new CameraOperator(scene, renderer, Math.PI/8, 0.4);
         cameraOperator.run();
     }

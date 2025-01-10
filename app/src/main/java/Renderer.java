@@ -13,26 +13,33 @@ public class Renderer {
     final private int width;
     final private int height;
     final private Scene scene;
+    final private boolean showGraphics;
 
-    public Renderer(Scene scene) {
-        frame = new JFrame("Test");
+    public Renderer(Scene scene, boolean showGraphics) {
+        this.showGraphics = showGraphics;
         this.scene = scene;
         this.width = scene.getScreenWidth();
         this.height = scene.getScreenHeight();
-        frame.setSize(this.width, this.height);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        if(showGraphics) {
+            frame = new JFrame("Test");
+            frame.setSize(this.width, this.height);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        } else {
+            frame = null;
+        }
     }
 
     public void update() {
-        frame.getContentPane().removeAll();
-        panel = new RenderPanel(scene);
-        frame.getContentPane().add(panel, BorderLayout.CENTER);
-        frame.repaint();
-        frame.setVisible(true);
-        try { // Wait to avoid graphical glitches.
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (Exception e) {
-        }
+        if(showGraphics){
+            frame.getContentPane().removeAll();
+            panel = new RenderPanel(scene);
+            frame.getContentPane().add(panel, BorderLayout.CENTER);
+            frame.repaint();
+            frame.setVisible(true);
+            try { // Wait to avoid graphical glitches.
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (Exception e) {
+        }}
     }
 }
 
