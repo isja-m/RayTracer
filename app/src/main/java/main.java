@@ -334,21 +334,23 @@ public class main {
 
         Vector normalVector1 = new Vector(0, 1, 0);
 
-        Polygon base1 = new Polygon(0.5, baseCentre1, firstBaseCorner1.add(baseCentre1), normalVector1, 4);
-        Polygon base2 = new Polygon(0.5, baseCentre2, firstBaseCorner1.add(baseCentre2), normalVector1, 5);
-        Polygon base3 = new Polygon(0.5, baseCentre3, firstBaseCorner1.add(baseCentre3), normalVector1, 6);
+        float diffuseCoefficient = 0.5f;
 
-        Pyramid pyramid1 = new Pyramid(topVector1, base1, 0.5);
-        Pyramid pyramid2 = new Pyramid(topVector2, base2, 0.5);
-        Pyramid pyramid3 = new Pyramid(topVector3, base3, 0.5);
+        Polygon base1 = new Polygon(diffuseCoefficient, baseCentre1, firstBaseCorner1.add(baseCentre1), normalVector1, 4);
+        Polygon base2 = new Polygon(diffuseCoefficient, baseCentre2, firstBaseCorner1.add(baseCentre2), normalVector1, 5);
+        Polygon base3 = new Polygon(diffuseCoefficient, baseCentre3, firstBaseCorner1.add(baseCentre3), normalVector1, 6);
+
+        Pyramid pyramid1 = new Pyramid(topVector1, base1, diffuseCoefficient);
+        Pyramid pyramid2 = new Pyramid(topVector2, base2, diffuseCoefficient);
+        Pyramid pyramid3 = new Pyramid(topVector3, base3, diffuseCoefficient);
 
         Vector firstCorner1 = new Vector(0, 1, 0);
         Vector testNormalVector1 = new Vector(-1, 0, 0);
         Vector vector1 = new Vector(0, 0, 0);
         Polygon polygon1 = new Polygon(0.5, vector1, firstCorner1.add(vector1), testNormalVector1, 4);
-        Polyhedron testPolyhedron = new Polyhedron(new Polygon[] {polygon1}, 0.5);
+        Polyhedron testPolyhedron = new Polyhedron(new Polygon[] {polygon1}, diffuseCoefficient);
 
-        Sphere sphere1 = new Sphere(sphereCentre1, 10, 0.5);
+        Sphere sphere1 = new Sphere(sphereCentre1, 10, diffuseCoefficient);
 
         Lightsource lightsource1 = new Lightsource(-2, 0, 4, 100,0,0);
         Lightsource lightsource2 = new Lightsource(-2, -2, -2, 0, 100, 0);

@@ -81,12 +81,14 @@ class PixelUpdateThread implements Runnable {
     }
 
     private boolean shapeIsNotBlockingLight(Vector locationOfLight, Line rayFromShapeToLightSource, Vector[] intersectionsWithShape, double distanceFromPointToLight,
-            boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) { // Requires different implementation for triangles.
+            boolean canSeeLight, Vector pointOnShape, Shape shape, Line rayFromViewToShape) {
         for (Vector intersection : intersectionsWithShape) {
             if ((distanceFromPointToLight - intersection.distance(locationOfLight))/distanceFromPointToLight > 1e-13) {
+                // There is a part of the shape inbetween the light and the point.
                 canSeeLight = false;
             }
-            if (intersection.distance(pointOnShape) < 1e-13 && rayFromShapeToLightSource.getParametricLine().direction.dotProduct(shape.getNormalVector(rayFromViewToShape.getParametricLine())) < 0) {
+            if (rayFromShapeToLightSource.getParametricLine().direction.dotProduct(shape.getNormalVector(rayFromViewToShape.getParametricLine())) < 0) {
+                // The point is on a part of the shape that is facing away from the light.
                 canSeeLight = false;
             }
         }
