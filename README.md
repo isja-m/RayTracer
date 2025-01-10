@@ -15,7 +15,8 @@ The code currently supports rendering of spheres, polygons and pyramids. General
    - public/private/package-private
  * Shape stretching
  * Light dimming based on distance to shape
- * Better filemanagement (i.e. not more subfolders)
+ * Better filemanagement (i.e. more subfolders)
+ * Replace CLI commands and JFrame graphics with a browserbased app, using Node, HTML and javascript.
 
 # How to Use
 
